@@ -1,0 +1,134 @@
+{
+  "size": {
+    "width": 1000,
+    "height": 600
+  },
+  "paredes": [
+    {
+      "longitud": 800,
+      "tipo": "horizontal",
+      "x": 100,
+      "y": 100
+    },
+    {
+      "longitud": 400,
+      "tipo": "vertical",
+      "x": 100,
+      "y": 100
+    },
+    {
+      "longitud": 800,
+      "tipo": "horizontal",
+      "x": 100,
+      "y": 500
+    },
+    {
+      "longitud": 400,
+      "tipo": "vertical",
+      "x": 900,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 200,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 300,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 500,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 800,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 400,
+      "y": 200
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 600,
+      "y": 200
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 700,
+      "y": 200
+    },
+    {
+      "longitud": 200,
+      "tipo": "horizontal",
+      "x": 100,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 400,
+      "y": 300
+    },
+    {
+      "longitud": 200,
+      "tipo": "vertical",
+      "x": 500,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 600,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 700,
+      "y": 300
+    },
+    {
+      "longitud": 200,
+      "tipo": "horizontal",
+      "x": 700,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 200,
+      "y": 400
+    },
+    {
+      "longitud": 200,
+      "tipo": "horizontal",
+      "x": 200,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 600,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 800,
+      "y": 400
+    }
+  ]
+}
