@@ -4,9 +4,29 @@ import javax.swing.*;
 
 public class GameWindow extends JFrame {
 
+    /**
+     * Formato de juego 1vs1
+     */
+    public static final int PLAYER_VS_PLAYER = 1;
+
+    /**
+     * Formato de juego contra el ordenador
+     */
+    public static final int PLAYER_VS_COMPUTER = 2;
+
+    /**
+     * Formato de juego online
+     */
+    public static final int PLAYER_VS_INTERNET = 3;
+
     private Dibujo dibujo;
+    private int gameType;
 
     public GameWindow() {
+        this(PLAYER_VS_PLAYER);
+    }
+
+    public GameWindow(int type) {
 
         setTitle("Tank Trouble");
 
@@ -15,18 +35,24 @@ public class GameWindow extends JFrame {
         setUndecorated(true);
         setResizable(false);
 
-        dibujo = new Dibujo();
+        dibujo = new Dibujo(this, type);
         add(dibujo);
 
         pack();
-
 
         setVisible(true);
 
     }
 
+    public void quit() {
+        setVisible(false);
+        new InicioWindow();
+        dispose();
+    }
+
     public static void main(String[] args) {
         new GameWindow();
     }
+
 
 }

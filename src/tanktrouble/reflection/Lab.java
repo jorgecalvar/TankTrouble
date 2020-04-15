@@ -1,7 +1,6 @@
 package tanktrouble.reflection;
 
-import tanktrouble.file.LabEditor;
-import tanktrouble.misc.Util;
+import tanktrouble.labcreator.LabEditor;
 import tanktrouble.ui.Dibujo;
 
 import java.awt.*;
@@ -31,6 +30,7 @@ public class Lab extends Area implements Pintable {
 
     private Dimension size;
     private List<Pared> paredes;
+    private List<Point2D> tanques;
 
     /**
      * Un punto es un vértice si y solo si:
@@ -40,60 +40,19 @@ public class Lab extends Area implements Pintable {
     private List<Point2D> vertices;
 
 
-    public Lab(Dimension size, List<Pared> paredes) {
+    public Lab(Dimension size, List<Pared> paredes, List<Point2D> tanques) {
         super();
         this.paredes = paredes;
         this.size = size;
         for (Pared p : paredes)
             add(new Area(p.getRectangle()));
         this.vertices = new ArrayList<>();
+        this.tanques = tanques;
         calcularVertices();
     }
 
     public static Lab createRamdomLab() {
-
-        /*List<Pared> paredes = new ArrayList<>();
-
-        paredes.add(new Pared(new Point2D.Double(100, 100), 800, Pared.TIPO_HORIZONTAL));
-        paredes.add(new Pared(new Point2D.Double(100, 100), 400, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(100,500), 800, Pared.TIPO_HORIZONTAL));
-        paredes.add(new Pared(new Point2D.Double(900, 100), 400, Pared.TIPO_VERTICAL));
-
-        paredes.add(new Pared(new Point2D.Double(200, 100), 100, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(300, 100), 100, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(500, 100), 100, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(800, 100), 100, Pared.TIPO_VERTICAL));
-
-        paredes.add(new Pared(new Point2D.Double(400, 200), 100, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(600, 200), 100, Pared.TIPO_HORIZONTAL));
-        paredes.add(new Pared(new Point2D.Double(700, 200), 100, Pared.TIPO_VERTICAL));
-
-        paredes.add(new Pared(new Point2D.Double(100, 300), 200, Pared.TIPO_HORIZONTAL));
-        paredes.add(new Pared(new Point2D.Double(400, 300), 100, Pared.TIPO_HORIZONTAL));
-        paredes.add(new Pared(new Point2D.Double(500, 300), 200, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(600, 300), 100, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(700, 300), 100, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(700, 300), 200, Pared.TIPO_HORIZONTAL));
-
-        paredes.add(new Pared(new Point2D.Double(200, 400), 100, Pared.TIPO_VERTICAL));
-        paredes.add(new Pared(new Point2D.Double(200, 400), 200, Pared.TIPO_HORIZONTAL));
-        paredes.add(new Pared(new Point2D.Double(600, 400), 100, Pared.TIPO_HORIZONTAL));
-        paredes.add(new Pared(new Point2D.Double(800, 400), 100, Pared.TIPO_VERTICAL));
-
-
-        List<Point2D.Double> vertices = new ArrayList<>();
-        vertices.add(new Point2D.Double(100, 100));
-        vertices.add(new Point2D.Double(900, 100));
-        vertices.add(new Point2D.Double(100, 500));
-        vertices.add(new Point2D.Double(900, 500));
-
-        Dimension size = new Dimension(1000, 800);
-
-        return new Lab(size, paredes);*/
-
-
-        return LabEditor.readInternal(Util.randomOneDigitInteger() + 1);
-
+        return LabEditor.readRandom();
     }
 
     /**
@@ -119,12 +78,31 @@ public class Lab extends Area implements Pintable {
         }
     }
 
+    /**
+     * Devuelve el tamaño de este laberinto
+     *
+     * @return tamaño del laberinto
+     */
     public Dimension getSize() {
         return size;
     }
 
+    /**
+     * List con todas las paredes de este laberinto
+     *
+     * @return lista con todas las paredes del laberinto
+     */
     public List<Pared> getParedes() {
         return paredes;
+    }
+
+    /**
+     * Devuelve las posiciones iniciales de los tanques en este laberinto
+     *
+     * @return posiciones iniciales de los tanques
+     */
+    public List<Point2D> getPosicionTanques() {
+        return tanques;
     }
 
     public void setDibujo(Dibujo dibujo) {

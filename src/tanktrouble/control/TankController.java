@@ -66,4 +66,8 @@ public abstract class TankController implements Controller {
         return forward || back || right || left || shoot;
     }
 
+    public void destroy() {
+        tanque = null;
+    }
+
 }

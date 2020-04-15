@@ -67,7 +67,7 @@ public class Bala extends Movible {
      */
     private void choque(Tanque t) {
         active = false;
-        System.out.println("Bala chocada con: " + t);
+        dibujo.getBoard().hitPlayer(t);
     }
 
 
@@ -78,6 +78,7 @@ public class Bala extends Movible {
      * @param distancia distancia que avanzará la bala
      */
     public void avanza(int distancia) {
+        if (!active) return;
         if (distancia > Pared.GROSOR) {
             avanzaIgnoraCamino(Pared.GROSOR);
             avanza(distancia - Pared.GROSOR);

@@ -1,4 +1,4 @@
-package tanktrouble.file;
+package tanktrouble.labcreator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,6 +8,7 @@ import tanktrouble.reflection.Pared;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +20,11 @@ import java.util.List;
 
 public class LabEditor {
 
+    /**
+     * Número de archivos con laboratorios en la memoria interna del programa.
+     */
+    public static final int NUM_LABS_INTERNAL = 1;
+
 
     /**
      * Devuelve el objeto Lab número n almacenado en los achivos internos del programa
@@ -27,7 +33,6 @@ public class LabEditor {
      * @return objeto Lab decodificado
      */
     public static Lab readInternal(int n) {
-        n = 1; //Temporal, while we only have 1 lab
         try {
             String name = "labs/lab" + n + ".json";
             InputStream stream = LabEditor.class.getClassLoader().getResourceAsStream(name);
@@ -43,10 +48,9 @@ public class LabEditor {
     /**
      * Genera un archivo Json a partir de un objeto lab y lo escribe en un archivo
      *
-     * @param lab      objeto lab a guardar
-     * @param fileName archivo donde se guardará
+     * @param lab objeto lab a guardar
      */
-    public static void write(Lab lab, String fileName) {
+    public static boolean write(Lab lab) {
 
         //Generate Json
         JSONObject o = new JSONObject();
@@ -60,7 +64,6 @@ public class LabEditor {
 
         JSONArray paredes_o = new JSONArray();
 
-
         for (Pared pared : lab.getParedes()) {
             JSONObject p_o = new JSONObject();
             Point2D start = pared.getStart();
@@ -73,15 +76,41 @@ public class LabEditor {
 
         o.put("paredes", paredes_o);
 
-        System.out.println(o);
+        JSONArray tanques_o = new JSONArray();
+
+        for (Point2D tanque : lab.getPosicionTanques()) {
+            JSONObject t_o = new JSONObject();
+            t_o.put("x", tanque.getX());
+            t_o.put("y", tanque.getY());
+            tanques_o.put(t_o);
+        }
+
+        o.put("tanques", tanques_o);
 
 
         try {
-            FileWriter f = new FileWriter(fileName);
-            f.write(o.toString());
+            final String DIR = "labs";
+            File dir = new File(DIR);
+            if (!dir.exists())
+                dir.mkdir();
+            if (!dir.exists())
+                return false;
+            int i = 1;
+            String file_name;
+            while (true) {
+                file_name = DIR + "/lab" + i + ".json";
+                File tmpFile = new File(file_name);
+                if (!tmpFile.exists())
+                    break;
+                i++;
+            }
+            FileWriter f = new FileWriter(file_name);
+            f.write(o.toString(2));
             f.close();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
     }
@@ -102,6 +131,32 @@ public class LabEditor {
         }
         JSONObject o = new JSONObject(s);
         return convertToLab(o);
+    }
+
+    public static Lab readRandom() {
+        if (getNumLabsExternal() > 0 && Math.random() > 0.5) {
+            //Read random external
+            int n = Util.randomInteger(getNumLabsExternal());
+            String name = "labs/lab" + n + ".json";
+            return readExternal(name);
+        } else {
+            return readInternal(Util.randomInteger(NUM_LABS_INTERNAL));
+        }
+
+    }
+
+    public static int getNumLabsExternal() {
+        File tmpDir = new File("labs");
+        if (!tmpDir.exists())
+            return 0;
+        int i = 1;
+        while (true) {
+            File tmp = new File(tmpDir + "/lab" + i + ".json");
+            if (!tmp.exists())
+                break;
+            i++;
+        }
+        return i - 1;
     }
 
     /**
@@ -128,7 +183,15 @@ public class LabEditor {
                     pared_o.get("tipo").equals("horizontal") ? Pared.TIPO_HORIZONTAL : Pared.TIPO_VERTICAL));
         }
 
-        return new Lab(size, paredes);
+        JSONArray tanques_o = (JSONArray) o.get("tanques");
+        List<Point2D> tanques = new ArrayList<>();
+        for (Object t_o : tanques_o) {
+            JSONObject tanque_o = (JSONObject) t_o;
+            tanques.add(new Point2D.Double((Integer) tanque_o.get("x") + x_offset,
+                    (Integer) tanque_o.get("y") + y_offset));
+        }
+
+        return new Lab(size, paredes, tanques);
     }
 
 

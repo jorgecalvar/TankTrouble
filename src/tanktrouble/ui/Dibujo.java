@@ -2,23 +2,34 @@ package tanktrouble.ui;
 
 import tanktrouble.control.BalasController;
 import tanktrouble.control.Speeder;
+import tanktrouble.control.TankController;
 import tanktrouble.control.UserController;
 import tanktrouble.misc.Styler;
 import tanktrouble.reflection.*;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class Dibujo extends Canvas implements Pintable {
 
-    public static Color COLOR_BG = new Color(0x9a1750);
+
+    /**
+     * Color de fondo del dibujo
+     */
+    private static Color COLOR_BG;
+
+
+    private int gameType;
+
 
     private Speeder speeder;
-
     private Lab lab;
-    private List<Tanque> tanques = new ArrayList<>();
+    private Map<Tanque, TankController> tanques;
     private BalasController balasController;
     private Board board;
 
@@ -27,28 +38,30 @@ public class Dibujo extends Canvas implements Pintable {
 
     private boolean hintsSet = false;
 
-    public Dibujo() {
+    private volatile boolean active = false;
 
-        super();
+    public Dibujo(GameWindow window, int gameType) {
 
-        setBackground(COLOR_BG);
-        setUpLab();
-
-        speeder = new Speeder(this);
-
-        balasController = new BalasController();
-        speeder.add(balasController);
-
-        setUpTanques();
-        board = new Board();
-        Styler.setRandomStyle();
+        this.gameType = gameType;
+        board = new Board(this);
 
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-
         bf = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
 
+        setFocusable(true);
 
-        speeder.start();
+        init();
+
+        board.showHelp();
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    window.quit();
+                }
+            }
+        });
     }
 
     /**
@@ -60,46 +73,118 @@ public class Dibujo extends Canvas implements Pintable {
         COLOR_BG = c;
     }
 
+    /**
+     * Devuelve el objeto Lab asociado a este dibujo
+     *
+     * @return objeto Lab
+     */
     public Lab getLab() {
         return lab;
     }
 
+    /**
+     * Devuelve el objeto Speeder asociado a este dibujo
+     *
+     * @return objeto Speeder
+     */
     public Speeder getSpeeder() {
         return speeder;
     }
 
+    /**
+     * Devuelve el tipo de juego
+     *
+     * @return tipo de juego
+     */
+    public int getGameType() {
+        return gameType;
+    }
+
+    /**
+     * Devuelve el objeto Board asociado a este dibujo
+     *
+     * @return objeto Board
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * Devuelve el objeto BalasController asociado a este dibujo
+     *
+     * @return objeto BalasControllers
+     */
     public BalasController getBalasController() {
         return balasController;
     }
 
-    public List<Tanque> getTanques() {
-        return tanques;
+    /**
+     * Devuelve el set con todos los tanque presentes en el dibujo
+     *
+     * @return tanque dibujados
+     */
+    public Set<Tanque> getTanques() {
+        return tanques.keySet();
     }
 
-    public void addTanque(Tanque t) {
-        tanques.add(t);
+    /**
+     * Devuelve si el dibujo está activado
+     *
+     * @return si está activado
+     */
+    public boolean isActive() {
+        return active;
     }
 
+    /**
+     * Añade un tanque al dibujo
+     *
+     * @param t tanque
+     * @param c controlador del tanque
+     */
+    public void addTanque(Tanque t, TankController c) {
+        tanques.put(t, c);
+        speeder.add(c);
+    }
+
+    /**
+     * Método invocado continuamente para representar el dibujo en el canvas
+     *
+     * @param g objeto sobre el que pintar
+     */
     @Override
     public void paint(Graphics g) {
-        if (!hintsSet) {
+        if (true) {
             setHints((Graphics2D) g);
+            hintsSet = true;
         }
         pintar((Graphics2D) bf.getGraphics());
         g.drawImage(bf, 0, 0, null);
     }
 
+    /**
+     * Método que recibe un objeto Graphics2D sobre el que dibujará el dibujo en su estado presente
+     *
+     * @param g objeto sobre el que pintar
+     */
     @Override
     public void pintar(Graphics2D g) {
         setHints(g);
         g.setColor(COLOR_BG);
         g.fillRect(0, 0, getWidth(), getHeight());
-        lab.pintar(g);
-        pintarTanques(g);
-        pintarBalas(g);
         board.pintar(g);
+        if (active) {
+            lab.pintar(g);
+            pintarTanques(g);
+            pintarBalas(g);
+        }
     }
 
+    /**
+     * Configura el tipo de rendering que se realizará en el objeto gráfico pasado
+     *
+     * @param g objeto que configurar
+     */
     private void setHints(Graphics2D g) {
         g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -108,19 +193,55 @@ public class Dibujo extends Canvas implements Pintable {
         //g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
     }
 
+    /**
+     * Pinta todos los tanque sobre el objeto g
+     *
+     * @param g objeto sobre el que pintar
+     */
     private void pintarTanques(Graphics2D g) {
-        for (Tanque t : tanques)
+        for (Tanque t : getTanques())
             t.pintar(g);
 
     }
 
+    /**
+     * Pinta todas las balas
+     *
+     * @param g objeto sobre el que pintar
+     */
     private void pintarBalas(Graphics2D g) {
-        for (Bala b : balasController.getBalas())
+        List<Bala> balas = new ArrayList<>(balasController.getBalas()); //To avoid ConcurrentNotificationException
+        for (Bala b : balas)
             b.pintar(g);
     }
 
+
+    @Override
     public void update(Graphics g) {
         paint(g);
+    }
+
+    public void init() {
+        destroy();
+        setUpLab();
+        speeder = new Speeder(this);
+        balasController = new BalasController();
+        speeder.add(balasController);
+        setUpTanques();
+        Styler.setStyle(Styler.DEFAULT);
+        setBackground(COLOR_BG);
+        active = true;
+        speeder.start();
+    }
+
+    public void deactivate() {
+        active = false;
+    }
+
+    public void destroy() {
+        if (speeder != null) {
+            speeder.parar();
+        }
     }
 
     private void setUpLab() {
@@ -128,18 +249,51 @@ public class Dibujo extends Canvas implements Pintable {
         lab.setDibujo(this);
     }
 
+    /**
+     * Configura los tanque dependiendo del modo de juego
+     */
     private void setUpTanques() {
-        Tanque t = new Tanque(478, 347, Math.PI / 3, this);
-        addTanque(t);
-        UserController c = new UserController(t);
+        tanques = new HashMap<>();
+        switch (gameType) {
+            case GameWindow.PLAYER_VS_PLAYER:
+                setUpPvsP();
+                break;
+            case GameWindow.PLAYER_VS_COMPUTER:
+                setUpPvsC();
+                break;
+            case GameWindow.PLAYER_VS_INTERNET:
+                break;
+        }
+    }
+
+    /**
+     * Configura los tanque suponeindo que el tipo de juego es PLAYER_VS_PLAYER
+     */
+    private void setUpPvsP() {
+        List<Point2D> posiciones = lab.getPosicionTanques();
+
+        Point2D p1 = posiciones.get(0);
+        Tanque t1 = new Tanque((int) p1.getX(), (int) p1.getY(), 0, this);
+        UserController c = new UserController(t1);
         addKeyListener(c);
-        speeder.add(c);
-        Tanque t2 = new Tanque(668, 282, 0, this);
-        addTanque(t2);
+        addTanque(t1, c);
+
+        Point2D p2 = posiciones.get(1);
+        Tanque t2 = new Tanque((int) p2.getX(), (int) p2.getY(), 0, this);
         UserController c2 = new UserController(t2);
         c2.setKeys(UserController.KEYS_ARROWS);
         addKeyListener(c2);
-        speeder.add(c2);
+        addTanque(t2, c2);
+
+        board.init(t1, t2);
     }
+
+    /**
+     * Configura los tanque suponiendo que el tipo de juego es PLAYER_VS_COMPUTER
+     */
+    private void setUpPvsC() {
+
+    }
+
 
 }

@@ -121,4 +121,11 @@ public class Pared implements Pintable {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Pared)) return false;
+        if (obj == this) return true;
+        Pared p = (Pared) obj;
+        return start.equals(p.getStart()) && longitud == p.getLongitud() && tipo == p.getTipo();
+    }
 }

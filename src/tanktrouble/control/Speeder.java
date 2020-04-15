@@ -24,8 +24,9 @@ public class Speeder extends Thread {
     @Override
     public void run() {
         while (continuar) {
-            for (Controller c : controllers)
-                c.execute();
+            if (dibujo.isActive())
+                for (Controller c : controllers)
+                    c.execute();
             try {
                 Thread.sleep(1000 / FRAMES_PER_SECOND);
             } catch (InterruptedException e) {
@@ -38,6 +39,11 @@ public class Speeder extends Thread {
 
     public void parar() {
         continuar = false;
+        for (Controller c : controllers) {
+            c.destroy();
+            c = null;
+        }
+
     }
 
 

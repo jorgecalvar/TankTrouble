@@ -1,5 +1,7 @@
 package tanktrouble.misc;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,5 +58,26 @@ public class Util {
     public static int randomOneDigitInteger() {
         return (int) (10 * Math.random());
     }
+
+    /**
+     * Devuelve un número aleatorio del [1, max]
+     *
+     * @param max máximo número posible
+     * @return entero aleatorio
+     */
+    public static int randomInteger(int max) {
+        return (int) Math.round(Math.random() * (max - 1) + 1);
+    }
+
+    /**
+     * Muestra un mensaje de aviso
+     *
+     * @param txt    mensaje a mostrar
+     * @param parent componente padre
+     */
+    public static void warn(String txt, Component parent) {
+        JOptionPane.showMessageDialog(parent, txt, "Warning", JOptionPane.WARNING_MESSAGE);
+    }
+
 
 }

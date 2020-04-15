@@ -34,4 +34,9 @@ public class BalasController implements Controller {
     public List<Bala> getBalas() {
         return balas;
     }
+
+    public void destroy() {
+        balas = null;
+    }
+
 }
