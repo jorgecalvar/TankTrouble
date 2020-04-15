@@ -4,7 +4,6 @@ import tanktrouble.misc.Styler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.Map;
 
 public class OptionsWindow extends JFrame {
@@ -42,7 +41,7 @@ public class OptionsWindow extends JFrame {
         add(panel3);
 
         //Listeners
-        btnAceptar.addActionListener((ActionListener) e -> {
+        btnAceptar.addActionListener(e -> {
             Styler.setDefaultStyle(Styler.getStyleList().get(estilo.getSelectedItem()));
             dispose();
         });

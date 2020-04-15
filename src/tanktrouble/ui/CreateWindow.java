@@ -45,7 +45,7 @@ public class CreateWindow extends JFrame {
 
         //Panel norte
 
-        cbTamano = new JComboBox<>((String[]) tamanos.keySet().toArray());
+        cbTamano = new JComboBox(tamanos.keySet().toArray());
         btnAplicar = new JButton("Aplicar");
         btnPintar = new JToggleButton("Pintar");
         btnBorrar = new JToggleButton("Borrar");

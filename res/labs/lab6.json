@@ -1,0 +1,402 @@
+{
+  "size": {
+    "width": 1000,
+    "height": 600
+  },
+  "paredes": [
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 0,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 100,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 100,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 200,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 200,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 300,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 300,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 400,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 400,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 500,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 500,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 600,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 600,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 700,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 700,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 800,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 800,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 900,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 900,
+      "y": 600
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 1000,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 0,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 1000,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 0,
+      "y": 200
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 1000,
+      "y": 200
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 0,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 1000,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 0,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 1000,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 0,
+      "y": 500
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 1000,
+      "y": 500
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 200,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 300,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 400,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 400,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 500,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 500,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 200,
+      "y": 500
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 300,
+      "y": 500
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 400,
+      "y": 500
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 200,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 200,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 200,
+      "y": 200
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 100,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 100,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 100,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 100,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 600,
+      "y": 200
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 600,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 600,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 700,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 500,
+      "y": 200
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 500,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 400,
+      "y": 0
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 600,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 700,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 800,
+      "y": 300
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 800,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 800,
+      "y": 400
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 800,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 900,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "vertical",
+      "x": 300,
+      "y": 100
+    },
+    {
+      "longitud": 100,
+      "tipo": "horizontal",
+      "x": 500,
+      "y": 500
+    }
+  ],
+  "tanques": [
+    {
+      "x": 389,
+      "y": 204
+    },
+    {
+      "x": 694,
+      "y": 500
+    }
+  ]
+}

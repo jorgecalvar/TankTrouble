@@ -23,7 +23,7 @@ public class LabEditor {
     /**
      * Número de archivos con laboratorios en la memoria interna del programa.
      */
-    public static final int NUM_LABS_INTERNAL = 1;
+    public static final int NUM_LABS_INTERNAL = 12;
 
 
     /**
