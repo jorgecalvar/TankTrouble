@@ -27,7 +27,7 @@ public class Bala extends Movible {
      * La bala se autodestruirá después de este número de choques
      */
     public static final int MAX_CHOQUES = 10;
-    public static final int OFFSET = 2;
+
     /**
      * Color de fondo de la bala
      */
@@ -79,6 +79,7 @@ public class Bala extends Movible {
      *
      * @param distancia distancia que avanzará la bala
      */
+    @Override
     public void avanza(int distancia) {
         if (!active) return;
         if (distancia > Pared.GROSOR) {
@@ -149,26 +150,6 @@ public class Bala extends Movible {
         setTheta(Math.PI + theta);
     }
 
-
-    private boolean labUp() {
-        Lab lab = dibujo.getLab();
-        return lab.contains(new Point2D.Double(posicion.getX() + RADIO, posicion.getY() - OFFSET));
-    }
-
-    private boolean labRight() {
-        Lab lab = dibujo.getLab();
-        return lab.contains(new Point2D.Double(posicion.getX() + DIAMETRO + OFFSET, posicion.getY() + RADIO));
-    }
-
-    private boolean labLeft() {
-        Lab lab = dibujo.getLab();
-        return lab.contains(new Point2D.Double(posicion.getX() - OFFSET, posicion.getY() + RADIO));
-    }
-
-    private boolean labDown() {
-        Lab lab = dibujo.getLab();
-        return lab.contains(new Point2D.Double(posicion.getX() + RADIO, posicion.getY() + DIAMETRO + OFFSET));
-    }
 
     private Tanque choqueConTanque(int offset) {
         Bala b = (Bala) clone();

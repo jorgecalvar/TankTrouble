@@ -1,10 +1,12 @@
 package tanktrouble.reflection;
 
+import tanktrouble.misc.Util;
 import tanktrouble.ui.Dibujo;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Este clase define a todas las formas que se dibujan sobre el Dibujo y que tienen un movimiento. Se los define mediante
@@ -28,6 +30,10 @@ import java.awt.geom.Point2D;
  */
 public abstract class Movible extends Area implements Pintable {
 
+    /**
+     * Offset utilizado cuando se comprueba si hay laberinto en alguno de los lados del objeto movible.
+     */
+    public static final int OFFSET = 2;
 
     protected Point2D posicion;
     protected double theta;
@@ -62,16 +68,12 @@ public abstract class Movible extends Area implements Pintable {
     }
 
     /**
-     * Da un nuevo al parámetro theta entre -2PI y 2PI
+     * Da un nuevo al parámetro theta entre 0 y 2PI
      *
      * @param theta Nuevo valor de theta
      */
     public void setTheta(double theta) {
-        while (theta > 2 * Math.PI)
-            theta = theta - 2 * Math.PI;
-        while (theta < 0)
-            theta = theta + 2 * Math.PI;
-        this.theta = theta;
+        this.theta = Util.formatAngle(theta);
     }
 
     public Dibujo getDibujo() {
@@ -135,8 +137,7 @@ public abstract class Movible extends Area implements Pintable {
     }
 
     /**
-     * Mueve este tanque la distancia especificada siempre que sea posible siguiendo las restricciones de posición de un
-     * tanque
+     * Mueve este movible la distancia especificada siempre que sea posible siguiendo sus restricciones de posición.
      *
      * @param distancia cistancia que avanzará el tanque
      */
@@ -231,6 +232,30 @@ public abstract class Movible extends Area implements Pintable {
         setTheta(this.theta + theta);
         setPosicion(new Point2D.Double(posicion.getX() - (newCentro.getX() - oldCentro.getX()),
                 posicion.getY() - (newCentro.getY() - oldCentro.getY())));
+    }
+
+    public boolean labUp() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getCenterX(), bounds.getMinY() - OFFSET));
+    }
+
+    public boolean labRight() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getMaxX() + OFFSET, bounds.getCenterY()));
+    }
+
+    public boolean labLeft() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getMinX() - OFFSET, bounds.getCenterY()));
+    }
+
+    public boolean labDown() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getCenterX(), bounds.getMaxY() + OFFSET));
     }
 
     /**

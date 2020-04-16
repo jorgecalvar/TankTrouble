@@ -5,7 +5,7 @@ import tanktrouble.reflection.Tanque;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class UserController extends TankController implements KeyListener {
+public class UserController extends TanqueController implements KeyListener {
 
     /**
      * La dirección del tanque se realizará con las teclas A, S, D y W del teclado.

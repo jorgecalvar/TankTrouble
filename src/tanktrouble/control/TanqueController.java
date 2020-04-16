@@ -2,7 +2,7 @@ package tanktrouble.control;
 
 import tanktrouble.reflection.Tanque;
 
-public abstract class TankController implements Controller {
+public abstract class TanqueController implements Controller {
 
     /**
      * Velocidad del tanque en píxeles por segundo cuando se avanza hacia delante
@@ -27,7 +27,7 @@ public abstract class TankController implements Controller {
     private int framesToAllowShooting = 0;
 
 
-    public TankController(Tanque tanque) {
+    public TanqueController(Tanque tanque) {
         this.tanque = tanque;
     }
 

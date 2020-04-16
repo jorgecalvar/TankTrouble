@@ -2,7 +2,7 @@ package tanktrouble.ui;
 
 import tanktrouble.control.BalasController;
 import tanktrouble.control.Speeder;
-import tanktrouble.control.TankController;
+import tanktrouble.control.TanqueController;
 import tanktrouble.control.UserController;
 import tanktrouble.misc.Sonido;
 import tanktrouble.misc.Styler;
@@ -47,7 +47,7 @@ public class Dibujo extends Canvas implements Pintable {
 
     private Speeder speeder;
     private Lab lab;
-    private Map<Tanque, TankController> tanques;
+    private Map<Tanque, TanqueController> tanques;
     private BalasController balasController;
     private Board board;
     private Sonido sonido;
@@ -185,7 +185,7 @@ public class Dibujo extends Canvas implements Pintable {
      * @param t tanque
      * @param c controlador del tanque
      */
-    public void addTanque(Tanque t, TankController c) {
+    public void addTanque(Tanque t, TanqueController c) {
         tanques.put(t, c);
         speeder.add(c);
     }

@@ -1,5 +1,7 @@
 package tanktrouble.reflection;
 
+import tanktrouble.control.Speeder;
+import tanktrouble.control.TanqueController;
 import tanktrouble.misc.Util;
 import tanktrouble.ui.Dibujo;
 
@@ -118,6 +120,46 @@ public class Tanque extends Movible {
         g.fill(circle);
         g.setColor(COLOR_BORDE);
         g.draw(circle);
+    }
+
+    /**
+     * Mueve este movible la distancia especificada siempre que sea posible siguiendo sus restricciones de posición.
+     *
+     * @param distancia cistancia que avanzará el tanque
+     */
+    public void avanza(int distancia) {
+        int d = calcAvance(distancia);
+        if (d != 0)
+            setPosicion(new Point2D.Double(posicion.getX() + Math.cos(theta) * d, posicion.getY() + Math.sin(theta) * d));
+        if (Math.abs(d) < Math.abs(distancia))
+            rotaContraPared(distancia);
+    }
+
+    private void rotaContraPared(int distancia) {
+        final double angle = 1.0 / Speeder.FRAMES_PER_SECOND * TanqueController.VELOCIDAD_ROTACION;
+        double thethaMov = distancia > 0 ? theta : Util.formatAngle(theta + Math.PI);
+        if (thethaMov < Math.PI / 2) {
+            if (labDown() && !labRight())
+                rota(-angle);
+            else if (labRight() && !labDown())
+                rota(angle);
+        } else if (thethaMov < Math.PI) {
+            if (labDown() && !labLeft())
+                rota(angle);
+            else if (labLeft() && !labDown())
+                rota(-angle);
+        } else if (thethaMov < 3 * Math.PI / 2) {
+            if (labLeft() && !labUp())
+                rota(angle);
+            else if (labUp() && !labLeft())
+                rota(-angle);
+        } else if (thethaMov < 2 * Math.PI) {
+            if (labRight() && !labUp())
+                rota(-angle);
+            else if (labUp() && !labRight()) {
+                rota(angle);
+            }
+        }
     }
 
     /**
@@ -299,7 +341,7 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Igual que rotate(Point2D) pero recibe una lista como parámetro
+     * Método de conveniencia para rotate(Point2D) pero recibe una lista como parámetro
      *
      * @param points puntos a rotar
      * @return puntos rotados

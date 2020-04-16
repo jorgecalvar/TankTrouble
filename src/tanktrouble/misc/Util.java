@@ -110,5 +110,19 @@ public class Util {
         return JOptionPane.showInputDialog(parent, txt, "Input", JOptionPane.QUESTION_MESSAGE);
     }
 
+    /**
+     * Formatea un ángulo cualquiera (-inf, +inf), en radianes, a un ángulo en el intervalo [0, 2PI]
+     *
+     * @param theta angulo a formatear
+     * @return angulo formateado
+     */
+    public static double formatAngle(double theta) {
+        while (theta > 2 * Math.PI)
+            theta = theta - 2 * Math.PI;
+        while (theta < 0)
+            theta = theta + 2 * Math.PI;
+        return theta;
+    }
+
 
 }
