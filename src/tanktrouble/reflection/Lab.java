@@ -1,6 +1,6 @@
 package tanktrouble.reflection;
 
-import tanktrouble.labcreator.LabEditor;
+import tanktrouble.labcreator.LabManager;
 import tanktrouble.ui.Dibujo;
 
 import java.awt.*;
@@ -51,8 +51,37 @@ public class Lab extends Area implements Pintable {
         calcularVertices();
     }
 
+    /**
+     * Lee un Lab para jugar aleatorio de los archivos internos y externos (si existen). Devuelve null si no se
+     * encuentra ningún Lab válido tras 10 intentos.
+     *
+     * @return Lab para ser jugado
+     */
     public static Lab createRamdomLab() {
-        return LabEditor.readRandom();
+        Lab lab;
+        int i = 0;
+        while (true) {
+            lab = LabManager.readRandom(LabManager.CONVERT_TYPE_GAME);
+            if (Lab.validLabSize(lab.getSize()) || i == 10)
+                break;
+            i++;
+        }
+        return lab;
+    }
+
+    public static boolean validLabSize(Dimension size) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        return size.getWidth() + 100 < screenSize.getWidth() && size.getHeight() + 150 < screenSize.getHeight();
+    }
+
+    /**
+     * For this game, a minimum screen size of 850x600 is required.
+     *
+     * @return is this device can run the game
+     */
+    public static boolean validDevice() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        return screenSize.getWidth() >= 900 && screenSize.getHeight() >= 550;
     }
 
     /**

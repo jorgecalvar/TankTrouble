@@ -20,24 +20,24 @@ public class InicioWindow extends JFrame {
 
         JLabel lblTitle = new JLabel("TANK TROUBLE");
         JButton btnPlayers = new JButton("2 Jugadores");
-        JButton btnInternet = new JButton("Join / Create game");
-        JButton btnCreate = new JButton("Crear laberinto");
+        JButton btnComputer = new JButton("Jugador vs Ordenador");
+        JButton btnCreate = new JButton("Crear Laberinto");
         JButton btnOptions = new JButton("Opciones");
 
         styleTitle(lblTitle);
         styleButton(btnPlayers);
-        styleButton(btnInternet);
+        styleButton(btnComputer);
         styleButton(btnCreate);
         styleButton(btnOptions);
 
         btnPlayers.addActionListener(e -> playerVsPlayer());
-        btnInternet.addActionListener(e -> playerVsInternet());
+        btnComputer.addActionListener(e -> playerVsComputer());
         btnCreate.addActionListener(e -> createLab());
         btnOptions.addActionListener(e -> options());
 
         panel.add(lblTitle);
         panel.add(btnPlayers);
-        panel.add(btnInternet);
+        panel.add(btnComputer);
         panel.add(btnCreate);
         panel.add(btnOptions);
 
@@ -67,18 +67,22 @@ public class InicioWindow extends JFrame {
     private static void styleButton(JButton btn) {
         btn.setFont(FONT_BUTTONS);
         btn.setMargin(new Insets(10, 10, 10, 10));
-        btn.setPreferredSize(new Dimension(280, 50));
+        btn.setPreferredSize(new Dimension(300, 50));
         btn.setBackground(new Color(0x2a9d8f));
         btn.setForeground(new Color(0x0b032d));
 
     }
 
     private void playerVsPlayer() {
-        new GameWindow();
-        exit();
+        try {
+            new GameWindow();
+            exit();
+        } catch (Exception e) {
+            Util.error(e.getMessage(), this);
+        }
     }
 
-    private void playerVsInternet() {
+    private void playerVsComputer() {
         Util.warn("Not supported yet!", this);
     }
 

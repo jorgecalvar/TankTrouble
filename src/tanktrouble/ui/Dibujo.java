@@ -4,6 +4,7 @@ import tanktrouble.control.BalasController;
 import tanktrouble.control.Speeder;
 import tanktrouble.control.TankController;
 import tanktrouble.control.UserController;
+import tanktrouble.misc.Sonido;
 import tanktrouble.misc.Styler;
 import tanktrouble.reflection.*;
 
@@ -16,6 +17,23 @@ import java.util.List;
 import java.util.*;
 
 public class Dibujo extends Canvas implements Pintable {
+
+    /**
+     * No se establecerán Hints para el render.
+     */
+    public static final int RENDERING_LIGHT = 1;
+
+    /**
+     * Se establecen Hints que mejorar un poco la imagen.
+     */
+    public static final int RENDERING_MODERATE = 2;
+
+    /**
+     * Se establecen HInts que provocan que la imagen mejora muy notablemente pero se ralentiza mucho el dibujo.
+     */
+    public static final int REDERING_INTENSE = 3;
+
+    private static int rendering = RENDERING_MODERATE;
 
 
     /**
@@ -32,11 +50,9 @@ public class Dibujo extends Canvas implements Pintable {
     private Map<Tanque, TankController> tanques;
     private BalasController balasController;
     private Board board;
-
+    private Sonido sonido;
 
     private volatile BufferedImage bf;
-
-    private boolean hintsSet = false;
 
     private volatile boolean active = false;
 
@@ -45,15 +61,15 @@ public class Dibujo extends Canvas implements Pintable {
         this.gameType = gameType;
         board = new Board(this);
 
+        sonido = new Sonido();
+
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         bf = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
 
         setFocusable(true);
 
         init();
-
         board.showHelp();
-
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -71,6 +87,33 @@ public class Dibujo extends Canvas implements Pintable {
      */
     public static void setColorBg(Color c) {
         COLOR_BG = c;
+    }
+
+    /**
+     * Devuelve el valor de rendering
+     *
+     * @return valor de rendering
+     */
+    public static int getRendering() {
+        return rendering;
+    }
+
+    /**
+     * Configura el valor del rendering
+     *
+     * @param _rendering nuevo valor de rendering
+     */
+    public static void setRendering(int _rendering) {
+        rendering = _rendering;
+    }
+
+    /**
+     * Devuelve el objeto sonido que pondrá los audios en este juego
+     *
+     * @return sonido
+     */
+    public Sonido getSonido() {
+        return sonido;
     }
 
     /**
@@ -154,10 +197,7 @@ public class Dibujo extends Canvas implements Pintable {
      */
     @Override
     public void paint(Graphics g) {
-        if (true) {
-            setHints((Graphics2D) g);
-            hintsSet = true;
-        }
+        setHints((Graphics2D) g);
         pintar((Graphics2D) bf.getGraphics());
         g.drawImage(bf, 0, 0, null);
     }
@@ -186,11 +226,15 @@ public class Dibujo extends Canvas implements Pintable {
      * @param g objeto que configurar
      */
     private void setHints(Graphics2D g) {
-        g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        //g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        //g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-        //g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        switch (rendering) {
+            case REDERING_INTENSE:
+                g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            case RENDERING_MODERATE:
+                g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
     }
 
     /**
@@ -232,6 +276,7 @@ public class Dibujo extends Canvas implements Pintable {
         setBackground(COLOR_BG);
         active = true;
         speeder.start();
+        sonido.playSound(Sonido.CHINESE_GONG);
     }
 
     public void deactivate() {

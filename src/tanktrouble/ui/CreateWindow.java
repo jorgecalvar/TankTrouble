@@ -1,7 +1,8 @@
 package tanktrouble.ui;
 
 import tanktrouble.labcreator.CreatorCanvas;
-import tanktrouble.labcreator.LabEditor;
+import tanktrouble.labcreator.LabManager;
+import tanktrouble.misc.Util;
 import tanktrouble.reflection.Lab;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ public class CreateWindow extends JFrame {
     /**
      * Mapa con todas las dimensiónes posibles
      */
-    public static final Map<String, Dimension> tamanos = Map.of("1200x600", new Dimension(1200, 600),
+    public static final Map<String, Dimension> TAMANOS = Map.of("1200x600", new Dimension(1200, 600),
             "1000x600", new Dimension(1000, 600),
             "800x600", new Dimension(800, 600),
             "800x400", new Dimension(800, 400));
@@ -29,6 +30,7 @@ public class CreateWindow extends JFrame {
     private JToggleButton btnCrearTanque;
     private JToggleButton btnBorrarTanque;
     private JButton btnBorrarTodo;
+    private JButton btnImportar;
     private JButton btnExportar;
     private JButton btnAyuda;
     private JButton btnSalir;
@@ -45,13 +47,14 @@ public class CreateWindow extends JFrame {
 
         //Panel norte
 
-        cbTamano = new JComboBox(tamanos.keySet().toArray());
+        cbTamano = new JComboBox(TAMANOS.keySet().toArray());
         btnAplicar = new JButton("Aplicar");
         btnPintar = new JToggleButton("Pintar");
         btnBorrar = new JToggleButton("Borrar");
         btnCrearTanque = new JToggleButton("Añadir");
         btnBorrarTanque = new JToggleButton("Borrar");
         btnBorrarTodo = new JButton("Borrar todo");
+        btnImportar = new JButton("Importar");
         btnExportar = new JButton("Exportar");
         btnAyuda = new JButton("Ayuda");
         btnSalir = new JButton("Volver al Inicio");
@@ -62,6 +65,7 @@ public class CreateWindow extends JFrame {
         btnCrearTanque.addActionListener(e -> crearTanqueClicked());
         btnBorrarTanque.addActionListener(e -> borrarTanqueClicked());
         btnBorrarTodo.addActionListener(e -> borrarTodoClicked());
+        btnImportar.addActionListener(e -> importarClicked());
         btnExportar.addActionListener(e -> exportarClicked());
         btnAyuda.addActionListener(e -> ayudaClicked());
         btnSalir.addActionListener(e -> salirClicked());
@@ -83,7 +87,9 @@ public class CreateWindow extends JFrame {
         pNorte.add(new JLabel(" | "));
         pNorte.add(btnBorrarTodo);
         pNorte.add(new JLabel(" | "));
+        pNorte.add(btnImportar);
         pNorte.add(btnExportar);
+        pNorte.add(new JLabel(" | "));
         pNorte.add(btnAyuda);
         pNorte.add(btnSalir);
 
@@ -107,7 +113,7 @@ public class CreateWindow extends JFrame {
      * Llamado cuando se ha hecho click en el botón Aplicar
      */
     private void aplicarClicked() {
-        canvas.aplicarDimension(tamanos.get(cbTamano.getSelectedItem()));
+        canvas.aplicarDimension(TAMANOS.get(cbTamano.getSelectedItem()));
     }
 
     /**
@@ -176,13 +182,37 @@ public class CreateWindow extends JFrame {
     }
 
     /**
+     * Lee un archivo laboratorio.
+     */
+    private void importarClicked() {
+        String name = input("Introduzca el nombre del archivo a leer.\n" +
+                "Debe estar en una carpeta llamada 'labs' en el directorio donde está el juego.\n" +
+                "Un ejemplo de nombre es: lab5.json");
+        if (name == null || name.isEmpty() || !name.substring(name.length() - 5).equals(".json")) {
+            warn("No ha introducido un nombre válido.");
+            return;
+        }
+        Lab lab = LabManager.readExternal("labs/" + name, LabManager.CONVERT_TYPE_CREATOR);
+        canvas.borrarTodo();
+        assert lab != null;
+        canvas.setDimension(lab.getSize());
+        canvas.setParedes(lab.getParedes());
+        canvas.setTanques(lab.getPosicionTanques());
+        canvas.repaint();
+    }
+
+    /**
      * Guarda el objeto Lab que está dibujado. Avisa al usuario tanto si ha habido algún error como si se realiza
      * correctamente.
      */
     private void exportarClicked() {
         try {
             Lab lab = canvas.createLab();
-            if (LabEditor.write(lab))
+            String name = input("Introduzca el nombre del archivo.\n" +
+                    "La extensión debe ser .json.\n" +
+                    "Deje el campo en blanco para poner el nombre por defecto");
+            if (name.isEmpty() || !name.substring(name.length() - 5).equals(".json")) name = null;
+            if (LabManager.write(lab, name))
                 info("Se ha exportado correctamente!");
             else
                 warn("Ha ocurrido un error en la exportación.");
@@ -214,9 +244,9 @@ public class CreateWindow extends JFrame {
         String sb = "¿Como usar el creador de laberintos?\n" +
                 "1. Elija el tamaño del laberinto que desea crear y presione Aplicar.\n" +
                 "2. Presione Pintar o Borrar y haga click en los puntos para formar paredes.\n" +
-                "3. Utiliza Añadir Tanque para elgir dónde apareceran los dos tanque al inicio de la partida.\n" +
+                "3. Utilice Añadir Tanque para elegir dónde apareceran los dos tanque al inicio de la partida.\n" +
                 "4. Cuando haya terminado presione Exportar para guardar el laberinto creado.\n" +
-                "El archivo guardado aparecerá dentro de una carpeta llamada Labs en la misma localización donde" +
+                "El archivo guardado aparecerá dentro de una carpeta llamada 'labs' en la misma localización donde\n" +
                 "está almacenado el juego.";
         info(sb);
     }
@@ -227,7 +257,7 @@ public class CreateWindow extends JFrame {
      * @param txt mensaje a mostrar
      */
     public void info(String txt) {
-        JOptionPane.showMessageDialog(this, txt, "Info", JOptionPane.INFORMATION_MESSAGE);
+        Util.info(txt, this);
     }
 
     /**
@@ -236,7 +266,10 @@ public class CreateWindow extends JFrame {
      * @param txt mensaje a mostrar
      */
     public void warn(String txt) {
-        JOptionPane.showMessageDialog(this, txt, "Aviso", JOptionPane.WARNING_MESSAGE);
+        Util.warn(txt, this);
     }
 
+    public String input(String txt) {
+        return Util.input(txt, this);
+    }
 }

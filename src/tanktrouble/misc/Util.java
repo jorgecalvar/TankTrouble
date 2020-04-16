@@ -79,5 +79,36 @@ public class Util {
         JOptionPane.showMessageDialog(parent, txt, "Warning", JOptionPane.WARNING_MESSAGE);
     }
 
+    /**
+     * Muestra un diálogo de información
+     *
+     * @param txt    mensaje a mostrar
+     * @param parent componente padre
+     */
+    public static void info(String txt, Component parent) {
+        JOptionPane.showMessageDialog(parent, txt, "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Muestra un diálogo de error
+     *
+     * @param txt    mensaje a mostrar
+     * @param parent componente padre
+     */
+    public static void error(String txt, Component parent) {
+        JOptionPane.showMessageDialog(parent, txt, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Solicita información al usuario.
+     *
+     * @param txt    mensaje a mostar
+     * @param parent componente padre
+     * @return texto introducido por el usuario
+     */
+    public static String input(String txt, Component parent) {
+        return JOptionPane.showInputDialog(parent, txt, "Input", JOptionPane.QUESTION_MESSAGE);
+    }
+
 
 }

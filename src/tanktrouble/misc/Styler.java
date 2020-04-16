@@ -24,24 +24,12 @@ public class Styler {
 
     public static final int STRIKING_BLUE = 3;
 
-    public static int DEFAULT = RANDOM;
+    public static final int DEFAULT = RANDOM;
 
-    public static void setStyle(int style) {
-        switch (style) {
-            case RANDOM:
-                setRandomStyle();
-                break;
-            case LIVELY_RED:
-                setLivelyRed();
-                break;
-            case FUTURE:
-                setFuture();
-                break;
-            case STRIKING_BLUE:
-                setStrikingBlue();
-                break;
+    public static int style = DEFAULT;
 
-        }
+    public static int getStyle() {
+        return style;
     }
 
     private static void setLivelyRed() {
@@ -77,8 +65,24 @@ public class Styler {
         return estilos;
     }
 
-    public static void setDefaultStyle(int style) {
-        DEFAULT = style;
+    public static void setStyle(int _style) {
+        switch (_style) {
+            case RANDOM:
+                setRandomStyle();
+                break;
+            case LIVELY_RED:
+                setLivelyRed();
+                break;
+            case FUTURE:
+                setFuture();
+                break;
+            case STRIKING_BLUE:
+                setStrikingBlue();
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal value for style: " + _style);
+        }
+        style = _style;
     }
 
 }

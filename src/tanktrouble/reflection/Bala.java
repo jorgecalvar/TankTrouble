@@ -1,5 +1,6 @@
 package tanktrouble.reflection;
 
+import tanktrouble.misc.Sonido;
 import tanktrouble.ui.Dibujo;
 
 import java.awt.*;
@@ -67,6 +68,7 @@ public class Bala extends Movible {
      */
     private void choque(Tanque t) {
         active = false;
+        dibujo.getSonido().playSound(Sonido.GUNSHOOT);
         dibujo.getBoard().hitPlayer(t);
     }
 

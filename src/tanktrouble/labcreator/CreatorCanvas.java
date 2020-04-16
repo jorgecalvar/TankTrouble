@@ -163,8 +163,29 @@ public class CreatorCanvas extends Canvas {
      *
      * @param tanques nuevo valor de tanques
      */
-    public void setTanques(List<Rectangle2D> tanques) {
-        this.tanques = tanques;
+    public void setTanques(List<?> tanques) {
+        if (tanques.size() == 0)
+            this.tanques = new ArrayList<>();
+        if (tanques.get(0) instanceof Rectangle2D)
+            this.tanques = (List<Rectangle2D>) tanques;
+        else if (tanques.get(0) instanceof Point2D) {
+            List<Point2D> puntos = (List<Point2D>) tanques;
+            List<Rectangle2D> rectangulos = new ArrayList<>();
+            for (Point2D punto : puntos)
+                rectangulos.add(new Rectangle2D.Double(punto.getX(), punto.getY(), TANQUE_WIDTH, TANQUE_HEIGHT));
+            this.tanques = rectangulos;
+        } else {
+            throw new IllegalArgumentException("Argument tanques must be List<Rectangle2D> or List<Point2D>.");
+        }
+    }
+
+    /**
+     * Configura el valor de la dimensión, pero no crea las paredes correspondientes, ni realiza comprobaciones.
+     *
+     * @param dimension nueva dimensión
+     */
+    public void setDimension(Dimension dimension) {
+        this.dimension = dimension;
     }
 
     /**
@@ -465,7 +486,7 @@ public class CreatorCanvas extends Canvas {
      */
     public void borrarTodo() {
         setParedes(new ArrayList<>());
-        setTanques(new ArrayList<>());
+        this.tanques = new ArrayList<>();
         dimension = null;
     }
 
@@ -538,7 +559,7 @@ public class CreatorCanvas extends Canvas {
         }
         List<Point2D> tanquesLab = new ArrayList<>();
         for (Rectangle2D t : tanques)
-            tanquesLab.add(new Point2D.Double(t.getX(), t.getY()));
+            tanquesLab.add(new Point2D.Double(t.getX() - OFFSET, t.getY() - OFFSET));
         return new Lab(dimension, paredesLab, tanquesLab);
     }
 

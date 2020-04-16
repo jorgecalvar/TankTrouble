@@ -1,5 +1,7 @@
 package tanktrouble.ui;
 
+import tanktrouble.reflection.Lab;
+
 import javax.swing.*;
 
 public class GameWindow extends JFrame {
@@ -27,6 +29,10 @@ public class GameWindow extends JFrame {
     }
 
     public GameWindow(int type) {
+
+        if (!Lab.validDevice())
+            throw new UnsupportedOperationException("El tamaño de pantalla de su disopsitivo es " +
+                    "demasiado pequeño para poder ejecutar este juego.");
 
         setTitle("Tank Trouble");
 

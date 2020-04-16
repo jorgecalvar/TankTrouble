@@ -18,13 +18,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LabEditor {
+public class LabManager {
 
     /**
      * Número de archivos con laboratorios en la memoria interna del programa.
      */
-    public static final int NUM_LABS_INTERNAL = 12;
+    public static final int NUM_LABS_INTERNAL = 11;
 
+    /**
+     * Se convertirá el Lab para que aparezca en el centro de la pantalla.
+     */
+    public static final int CONVERT_TYPE_GAME = 1;
+
+    /**
+     * Se convertirá el lab para ser editado con el labcreator, es decir, teniendo en cuenta el OFFSET.
+     */
+    public static final int CONVERT_TYPE_CREATOR = 2;
+
+    /**
+     * Los Labs será obtenidos tanto de los archivos interna como externa.
+     */
+    public static final int SOURCE_BOTH = 1;
+
+    /**
+     * Los Labs serán obtenidos de los archivos internos
+     */
+    public static final int SOURCE_INTERNAL = 2;
+
+    /**
+     * Los Labs serán obtenidos de los archivos externos
+     */
+    public static final int SOURCE_EXTERNAL = 3;
+
+
+    public static int source = SOURCE_BOTH;
+
+    /**
+     * Devuelve el valor del attributo source
+     *
+     * @return de donde provienen los archivos
+     */
+    public static int getSource() {
+        return source;
+    }
+
+    /**
+     * Configura el valor de source, es decir, de donde provendrán los Labs
+     *
+     * @param _source fuente de los archivos
+     */
+    public static void setSource(int _source) {
+        source = _source;
+    }
 
     /**
      * Devuelve el objeto Lab número n almacenado en los achivos internos del programa
@@ -32,13 +77,15 @@ public class LabEditor {
      * @param n el número de elemento a devolver (mayor 1 y 10)
      * @return objeto Lab decodificado
      */
-    public static Lab readInternal(int n) {
+    public static Lab readInternal(int n, int convertType) {
+        if (n > NUM_LABS_INTERNAL || n < 1)
+            throw new IllegalArgumentException("Not valid n: " + n);
         try {
             String name = "labs/lab" + n + ".json";
-            InputStream stream = LabEditor.class.getClassLoader().getResourceAsStream(name);
+            InputStream stream = LabManager.class.getClassLoader().getResourceAsStream(name);
             if (stream == null) throw new NullPointerException("Problem reading internal files");
             String s = Util.readInputStream(stream);
-            return convertToLab(new JSONObject(s));
+            return convertToLab(new JSONObject(s), convertType);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -46,11 +93,14 @@ public class LabEditor {
     }
 
     /**
-     * Genera un archivo Json a partir de un objeto lab y lo escribe en un archivo
+     * Genera un archivo Json a partir de un objeto lab y lo escribe en un archivo, cuyo nombre se especifica como
+     * parámetro. El archivo debe estar dentro de la carpeta labs, localizada en la ruta donde está el ejecutable.
+     * Si el nombre es nulo, pondrá un por defecto.
      *
-     * @param lab objeto lab a guardar
+     * @param lab  objeto lab a guardar
+     * @param name nombre del archivo
      */
-    public static boolean write(Lab lab) {
+    public static boolean write(Lab lab, String name) {
 
         //Generate Json
         JSONObject o = new JSONObject();
@@ -97,13 +147,16 @@ public class LabEditor {
                 return false;
             int i = 1;
             String file_name;
-            while (true) {
-                file_name = DIR + "/lab" + i + ".json";
-                File tmpFile = new File(file_name);
-                if (!tmpFile.exists())
-                    break;
-                i++;
-            }
+            if (name == null) {
+                while (true) {
+                    file_name = DIR + "/lab" + i + ".json";
+                    File tmpFile = new File(file_name);
+                    if (!tmpFile.exists())
+                        break;
+                    i++;
+                }
+            } else
+                file_name = "labs/" + name;
             FileWriter f = new FileWriter(file_name);
             f.write(o.toString(2));
             f.close();
@@ -121,7 +174,7 @@ public class LabEditor {
      * @param fileName archivo a leer
      * @return objeto Lab
      */
-    public static Lab readExternal(String fileName) {
+    public static Lab readExternal(String fileName, int convertType) {
         String s;
         try {
             s = Files.readString(Path.of(fileName));
@@ -130,19 +183,33 @@ public class LabEditor {
             return null;
         }
         JSONObject o = new JSONObject(s);
-        return convertToLab(o);
+        return convertToLab(o, convertType);
     }
 
-    public static Lab readRandom() {
-        if (getNumLabsExternal() > 0 && Math.random() > 0.5) {
-            //Read random external
-            int n = Util.randomInteger(getNumLabsExternal());
-            String name = "labs/lab" + n + ".json";
-            return readExternal(name);
-        } else {
-            return readInternal(Util.randomInteger(NUM_LABS_INTERNAL));
+    public static Lab readRandom(int convertType) {
+        switch (source) {
+            case SOURCE_BOTH:
+                if (getNumLabsExternal() > 0 && Math.random() < 0.5)
+                    return readRandomExternal(convertType);
+            case SOURCE_INTERNAL:
+                return readRandomInternal(convertType);
+            case SOURCE_EXTERNAL:
+                if (getNumLabsExternal() > 0)
+                    return readRandomExternal(convertType);
+                else
+                    throw new UnsupportedOperationException("No hay ningún archivo externo!");
         }
+        throw new IllegalStateException("Illegal source value: " + source);
+    }
 
+    public static Lab readRandomExternal(int convertType) {
+        int n = Util.randomInteger(getNumLabsExternal());
+        String name = "labs/lab" + n + ".json";
+        return readExternal(name, convertType);
+    }
+
+    public static Lab readRandomInternal(int convertType) {
+        return readInternal(Util.randomInteger(NUM_LABS_INTERNAL), convertType);
     }
 
     public static int getNumLabsExternal() {
@@ -165,13 +232,23 @@ public class LabEditor {
      * @param o objeto JSON con la información
      * @return objeto Lab
      */
-    private static Lab convertToLab(JSONObject o) {
+    private static Lab convertToLab(JSONObject o, int convertType) {
         JSONObject size_o = (JSONObject) o.get("size");
         Dimension size = new Dimension((Integer) size_o.get("width"), (Integer) size_o.get("height"));
 
-        Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
-        double x_offset = (screen_size.getWidth() - size.getWidth()) / 2;
-        double y_offset = (screen_size.getHeight() - size.getHeight()) / 2;
+        double x_offset;
+        double y_offset;
+        if (convertType == CONVERT_TYPE_GAME) {
+            Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
+            x_offset = (screen_size.getWidth() - size.getWidth()) / 2;
+            y_offset = (screen_size.getHeight() - size.getHeight()) / 2;
+        } else if (convertType == CONVERT_TYPE_CREATOR) {
+            x_offset = CreatorCanvas.OFFSET;
+            y_offset = CreatorCanvas.OFFSET;
+        } else {
+            throw new IllegalArgumentException("Illgal convert type: " + convertType);
+        }
+
 
         JSONArray paredes_o = (JSONArray) o.get("paredes");
         List<Pared> paredes = new ArrayList<>();
@@ -190,7 +267,6 @@ public class LabEditor {
             tanques.add(new Point2D.Double((Integer) tanque_o.get("x") + x_offset,
                     (Integer) tanque_o.get("y") + y_offset));
         }
-
         return new Lab(size, paredes, tanques);
     }
 
