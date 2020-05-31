@@ -290,7 +290,7 @@ public class Dibujo extends Canvas implements Pintable {
     public void init() {
         destroy();
 
-        Styler.setStyle(Styler.DEFAULT);
+        Styler.initStyle();
         setBackground(COLOR_BG);
 
         if (gameType == GameWindow.PLAYER_VS_INTERNET_CLIENTE) {

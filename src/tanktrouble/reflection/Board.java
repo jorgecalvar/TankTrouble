@@ -209,7 +209,6 @@ public class Board implements Pintable {
         if (!gameOver) {
             gameOver = true;
             new Thread(() -> {
-                System.out.println("DESACTIVANDO DIBUJO...");
                 dibujo.deactivate();
                 try {
                     Thread.sleep(1500);

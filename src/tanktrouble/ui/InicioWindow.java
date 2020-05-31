@@ -31,7 +31,7 @@ public class InicioWindow extends JFrame {
         JLabel lblTitle = new JLabel("TANK TROUBLE");
         JButton btnPlayers = new JButton("2 Jugadores");
         JButton btnComputer = new JButton("Jugador vs Ordenador");
-        JButton btnInternet = new JButton("Jugador vs Internet");
+        JButton btnInternet = new JButton("Partida Online");
         JButton btnCreate = new JButton("Crear Laberinto");
         JButton btnOptions = new JButton("Opciones");
 
@@ -150,6 +150,7 @@ public class InicioWindow extends JFrame {
                 gameType = GameWindow.PLAYER_VS_INTERNET_CLIENTE;
                 msg = "Introduce el código proporcionado por el creador de la partida:";
                 String c = JOptionPane.showInputDialog(this, msg, titulo, JOptionPane.QUESTION_MESSAGE);
+                if (c == null || c.isEmpty()) return;
                 String ip = Util.unsimplifyIP(c);
                 Cliente.setIpAddress(ip);
             }

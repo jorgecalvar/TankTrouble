@@ -1,6 +1,5 @@
 package tanktrouble.labcreator;
 
-import tanktrouble.misc.Styler;
 import tanktrouble.reflection.Lab;
 import tanktrouble.reflection.Pared;
 import tanktrouble.reflection.Tanque;
@@ -154,7 +153,7 @@ public class CreatorCanvas extends Canvas {
 
         createDots();
 
-        Styler.setStyle(Styler.STRIKING_BLUE);
+        // Styler.setStyle(Styler.STRIKING_BLUE);
 
     }
 

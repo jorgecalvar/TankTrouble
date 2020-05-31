@@ -104,7 +104,6 @@ public class Environment {
         // Active
         boolean active = (Boolean) estado.get("active");
         if (!active) {
-            System.out.println("COMENZANDO GAMEOVER");
             dibujo.getBoard().gameOver();
         } else {
 

@@ -63,6 +63,7 @@ public class Speeder extends Thread {
                 e.printStackTrace();
                 continuar = false;
             }
+            if (!continuar) break;
             try {
                 if (repaintType == REPAINT_PARTIAL)
                     redibujar();

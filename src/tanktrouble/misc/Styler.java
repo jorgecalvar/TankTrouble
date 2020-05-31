@@ -37,7 +37,7 @@ public class Styler {
      */
     public static final int DEFAULT = RANDOM;
 
-    private static int style = DEFAULT;
+    private static int style = -1;
 
     /**
      * Devuelve el estilo actual
@@ -96,6 +96,14 @@ public class Styler {
         }
         style = _style;
     }
+
+    /**
+     * Si todavia no se ha configurado ningun estilo, configura el estilo por defecto.
+     */
+    public static void initStyle() {
+        if (style == -1) setStyle(DEFAULT);
+    }
+
 
     /**
      * Devuelve un map con el nombre humano de los estilos (claves) y su entero correspondiente (valores).
