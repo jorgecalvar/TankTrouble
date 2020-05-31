@@ -5,10 +5,22 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.net.URL;
 
+/**
+ * Reproduce sonido durante el juego.
+ */
 public class Sonido {
 
+    /**
+     * Sonido de disparo
+     */
     public static final int GUNSHOOT = 1;
+
+    /**
+     * Sonido de gong chino
+     */
     public static final int CHINESE_GONG = 2;
+    //TODO Add new sounds
+
     /**
      * Sonido activado
      */
@@ -17,6 +29,9 @@ public class Sonido {
      * Sonido no activado
      */
     public static final int STATE_OFF = 2;
+    /**
+     * Carpeta donde se encuentran los sonidos
+     */
     public static final String DIR = "audio/";
     private static int state = STATE_ON;
 
@@ -44,7 +59,7 @@ public class Sonido {
     }
 
     /**
-     * Obtiene el nombre del archivo correspondiente al sonido pasado como parámetro.
+     * Obtiene el nombre del archivo correspondiente al sonido pasado como parametro.
      *
      * @param sound sonido a buscar
      * @return nombre del archivo
@@ -60,10 +75,10 @@ public class Sonido {
     }
 
     /**
-     * Obtiene la posición inicial, en milisegundos, donde deberá empezar a sonar el audio pasado como parámetro.
+     * Obtiene la posicion inicial, en milisegundos, donde debera empezar a sonar el audio pasado como parametro.
      *
      * @param sound sonido a buscar
-     * @return posición inicial en segundos
+     * @return posicion inicial en segundos
      */
     public static int getStartPosition(int sound) {
         switch (sound) {
@@ -77,11 +92,11 @@ public class Sonido {
     }
 
     /**
-     * Obtiene el tiempo, en milisegundos, que deberá sonar un audio, es decir, el tiempo a partir del cual se deberá
+     * Obtiene el tiempo, en milisegundos, que debera sonar un audio, es decir, el tiempo a partir del cual se debera
      * parar..
      *
      * @param sound sonido a buscar
-     * @return duración el milisegundos
+     * @return duracion el milisegundos
      */
     public static int getDuration(int sound) {
         switch (sound) {
@@ -93,16 +108,26 @@ public class Sonido {
         throw new IllegalArgumentException("Illegal sound: " + sound);
     }
 
+    /**
+     * Devuelve el estado actual
+     *
+     * @return estado actual
+     */
     public static int getState() {
         return state;
     }
 
+    /**
+     * Configura el estado
+     *
+     * @param _state nuevo valor de estado
+     */
     public static void setState(int _state) {
         state = _state;
     }
 
     /**
-     * Pone un sonido por los altavoces del dispositivo.
+     * Reproduce un sonido por los altavoces del dispositivo.
      *
      * @param sound sonido para poner
      */

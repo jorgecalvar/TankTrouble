@@ -9,13 +9,15 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Esta clase define al objeto Tanque, que representa una forma que es capaz de dibujarse en un Canvas. La funcionalidad
- * incluye además ser capaz de moverse y de girar, abstrayendo el movimiento de los vehículos en el mundo real. Es decir,
- * el tanque es capaz de cambiar su posición automáticamente siguiente las definiciones de los métodos avanzar y rotar. *
+ * Esta clase define al objeto {@link Tanque}, que representa una forma que es capaz de dibujarse en un {@link Canvas}.
+ * La funcionalidad incluye ademas ser capaz de moverse y de girar, abstrayendo el movimiento de los vehiculos en el
+ * mundo real. Es decir, el {@link Tanque} es capaz de cambiar su posicion automaticamente siguiente las definiciones
+ * de los metodos avanzar y rotar.
  */
 
 public class Tanque extends Movible {
@@ -31,7 +33,7 @@ public class Tanque extends Movible {
     public static final int BASE_HEIGTH = 40;
 
     /**
-     * Longitud del lado largo del cañón del tanque
+     * Longitud del lado largo del cañon del tanque
      */
     public static final int CANNON_WIDTH = 30;
 
@@ -41,34 +43,34 @@ public class Tanque extends Movible {
     public static final int CANNON_HEIGHT = 10;
 
     /**
-     * Parte del cañón que se encuentra sobre la base del tanque
+     * Parte del cañon que se encuentra sobre la base del tanque
      */
     public static final double CANNON_FACTOR = 0.6;
 
     /**
-     * Radio del círculo que se encuentra en el centro de la base del tanque
+     * Radio del circulo que se encuentra en el centro de la base del tanque
      */
     public static final int CIRCLE_RADIO = 10;
 
 
     /**
-     * Color de la base del tanque
+     * {@link Color} de la base del tanque
      */
     private static Color COLOR_BASE;
 
     /**
-     * Color del canon del tanque
+     * {@link Color} del canon del tanque
      */
     private static Color COLOR_CANNON;
 
     /**
-     * Color de los bordes de las partes del tanque
+     * {@link Color} de los bordes de las partes del tanque
      */
     private static Color COLOR_BORDE = Color.BLACK;
 
 
     /**
-     * Construye un objeto tanque
+     * Construye un objeto {@link Tanque}
      *
      * @param x      coordenada x de la esquina superior izquierda cuando theta es 0
      * @param y      coordenada y de la esquina superior izquiereda cunado theta es 0
@@ -80,10 +82,10 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Construye un objeto tanque
+     * Construye un objeto {@link Tanque}
      *
      * @param posicion posicion de la esquina superior izquierda cuando theta es 0
-     * @param theta    ángulo (en radianes) respecto al eje x positivo en sentido del eje y positivo
+     * @param theta    angulo (en radianes) respecto al eje x positivo en sentido del eje y positivo
      * @param dibujo   dibujo en el que se encuentra este tanque
      */
     public Tanque(Point2D posicion, double theta, Dibujo dibujo) {
@@ -91,9 +93,9 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Configura el color de la base
+     * Configura el {@link Color} de la base
      *
-     * @param c color
+     * @param c {@link Color}
      */
     public static void setColorBase(Color c) {
         COLOR_BASE = c;
@@ -104,7 +106,7 @@ public class Tanque extends Movible {
     public void pintar(Graphics2D g) {
         if (illegalPosition())
             throw new UnsupportedOperationException("Es ilegal pintar un tanque que no cumpla " +
-                    "las restricciones de posición");
+                    "las restricciones de posicion");
         Polygon base = getBase();
         Polygon cannon = getCannon();
         Ellipse2D circle = getCircle();
@@ -123,10 +125,11 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Mueve este movible la distancia especificada siempre que sea posible siguiendo sus restricciones de posición.
+     * Mueve este {@link Tanque} la distancia especificada siempre que sea posible siguiendo sus restricciones de posicion.
      *
-     * @param distancia cistancia que avanzará el tanque
+     * @param distancia cistancia que avanzara el tanque
      */
+    @Override
     public void avanza(int distancia) {
         int d = calcAvance(distancia);
         if (d != 0)
@@ -139,31 +142,63 @@ public class Tanque extends Movible {
         final double angle = 1.0 / Speeder.FRAMES_PER_SECOND * TanqueController.VELOCIDAD_ROTACION;
         double thethaMov = distancia > 0 ? theta : Util.formatAngle(theta + Math.PI);
         if (thethaMov < Math.PI / 2) {
-            if (labDown() && !labRight())
+            if (hasObstacleBelow() && !hasObstacleRight())
                 rota(-angle);
-            else if (labRight() && !labDown())
+            else if (hasObstacleRight() && !hasObstacleBelow())
                 rota(angle);
         } else if (thethaMov < Math.PI) {
-            if (labDown() && !labLeft())
+            if (hasObstacleBelow() && !hasObstacleLeft())
                 rota(angle);
-            else if (labLeft() && !labDown())
+            else if (hasObstacleLeft() && !hasObstacleBelow())
                 rota(-angle);
         } else if (thethaMov < 3 * Math.PI / 2) {
-            if (labLeft() && !labUp())
+            if (hasObstacleLeft() && !hasObstacleOver())
                 rota(angle);
-            else if (labUp() && !labLeft())
+            else if (hasObstacleOver() && !hasObstacleLeft())
                 rota(-angle);
         } else if (thethaMov < 2 * Math.PI) {
-            if (labRight() && !labUp())
+            if (hasObstacleRight() && !hasObstacleOver())
                 rota(-angle);
-            else if (labUp() && !labRight()) {
+            else if (hasObstacleOver() && !hasObstacleRight()) {
                 rota(angle);
             }
         }
     }
 
+    @Override
+    public boolean hasObstacleOver() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getMinX(), bounds.getMinY() - OFFSET)) ||
+                lab.contains(new Point2D.Double(bounds.getMaxX(), bounds.getMinY() - OFFSET));
+    }
+
+    @Override
+    public boolean hasObstacleRight() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getMaxX() + OFFSET, bounds.getMinY())) ||
+                lab.contains(new Point2D.Double(bounds.getMaxX() + OFFSET, bounds.getMaxY()));
+    }
+
+    @Override
+    public boolean hasObstacleLeft() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getMinX() - OFFSET, bounds.getMinY())) ||
+                lab.contains(new Point2D.Double(bounds.getMinX() - OFFSET, bounds.getMaxY()));
+    }
+
+    @Override
+    public boolean hasObstacleBelow() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getMinX(), bounds.getMaxY() + OFFSET)) ||
+                lab.contains(new Point2D.Double(bounds.getMaxX(), bounds.getMaxY() + OFFSET));
+    }
+
     /**
-     * Dispara una bala
+     * Dispara una {@link Bala}.
      */
     public void shoot() {
         Point2D centroBala = getCentroBala();
@@ -173,10 +208,10 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Se sobrescribe este método con el objetivo de que se ignore a un tanque cuando se esté calculando si está en
-     * una posición ilegal
+     * Se sobrescribe este metodo con el objetivo de que se ignore a un {@link Tanque} cuando se este calculando si esta en
+     * una posicion ilegal
      *
-     * @return si la posición es ilegal
+     * @return si la posicion es ilegal
      */
     @Override
     public boolean illegalPosition() {
@@ -184,10 +219,10 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Comprueba si la rotación del tanque un ángulo theta cumple con las restricciones de posición
+     * Comprueba si la rotacion del {@link Tanque} un angulo theta cumple con las restricciones de posicion
      *
-     * @param theta ángulo a rotar
-     * @return si dicho ángulo cumple las restricciones de posición
+     * @param theta angulo a rotar
+     * @return si dicho angulo cumple las restricciones de posicion
      */
     @Override
     protected boolean validRotation(double theta) {
@@ -197,10 +232,10 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Calcula si el tanque resultante de avanzar una distancia cumple las restricciones de posición
+     * Calcula si el {@link Tanque} resultante de avanzar una distancia cumple las restricciones de posicion
      *
      * @param distancia distancia a avanzar
-     * @return si la posición resultante es válida
+     * @return si la posicion resultante es valida
      */
     protected boolean validAvance(int distancia) {
         Movible m = (Movible) clone();
@@ -210,7 +245,7 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Devuelve el centro de masa del tanque, considerando este como el centro de masa de la base
+     * Devuelve el centro de masa del {@link Tanque}, considerando este como el centro de masa de la base
      *
      * @return centro de masa
      */
@@ -220,9 +255,9 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Calcula el centro de masa de la base del tanque
+     * Calcula el centro de masa de la base del {@link Tanque}
      *
-     * @return centro de masa de la base del tanque
+     * @return centro de masa de la base del {@link Tanque}
      */
     public Point2D getBaseCenter() {
         List<Point2D> corners = getBaseCorners();
@@ -231,9 +266,9 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Devuelve el polígono con la base del tanque
+     * Devuelve el {@link Polygon} con la base del {@link Tanque}
      *
-     * @return Polígono de la base del tanque
+     * @return {@link Polygon} de la base del {@link Tanque}
      */
     public Polygon getBase() {
         Polygon p = new Polygon();
@@ -243,9 +278,9 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Devuelve el polígono con el cañón del tanque
+     * Devuelve el {@link Polygon} con el cañon del {@link Tanque}
      *
-     * @return Polígono del cañón del tanque
+     * @return {@link Polygon} del cañon del {@link Tanque}
      */
     public Polygon getCannon() {
         Polygon p = new Polygon();
@@ -274,9 +309,9 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Calcula la posición de la bala que genera el tanque teniendo en cuenta su posición actual
+     * Calcula la posicion de la {@link Bala} que genera el tanque teniendo en cuenta su posicion actual
      *
-     * @return posicion de la bala
+     * @return posicion de la {@link Bala}
      */
     private Point2D getCentroBala() {
         final int offset = 1;
@@ -329,7 +364,7 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Rota respectro al centro de masa del tanque
+     * Rota respectro al centro de masa del {@link Tanque}
      *
      * @param p punto a rotar
      * @return punto rotado
@@ -341,7 +376,7 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Método de conveniencia para rotate(Point2D) pero recibe una lista como parámetro
+     * Metodo de conveniencia para {@link #rotate(Point2D)} pero recibe una lista como parametro
      *
      * @param points puntos a rotar
      * @return puntos rotados
@@ -354,12 +389,19 @@ public class Tanque extends Movible {
     }
 
     /**
-     * Elimina y vuelva a crear el área de este rectángulo
+     * Elimina y vuelva a crear el {@link Area} de este rectangulo
      */
     protected void createArea() {
         reset();
         add(new Area(getBase()));
         add(new Area(getCannon()));
+    }
+
+    public Rectangle2D getRepaintBounds() {
+        Rectangle2D bounds = getBounds2D();
+        final int offset = (int) (1.0 * TanqueController.VELOCIDAD_FORWARD / Speeder.FRAMES_PER_SECOND + 1);
+        return new Rectangle2D.Double(bounds.getX() - offset, bounds.getY() - offset,
+                bounds.getWidth() + 2 * offset, bounds.getHeight() + 2 * offset);
     }
 
 }

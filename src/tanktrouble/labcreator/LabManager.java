@@ -17,44 +17,49 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Esta clase se encarga de la escritura y lectura de los objetos {@link Lab}, tanto de la memoria externa como interna.
+ * Tambien se encarga de codificacion y decodificaion a formato JSON.
+ */
 public class LabManager {
 
     /**
-     * Número de archivos con laboratorios en la memoria interna del programa.
+     * Numero de archivos con {@link Lab} en la memoria interna del programa.
      */
     public static final int NUM_LABS_INTERNAL = 11;
 
     /**
-     * Se convertirá el Lab para que aparezca en el centro de la pantalla.
+     * Se convertira el {@link Lab} para que aparezca en el centro de la pantalla.
      */
     public static final int CONVERT_TYPE_GAME = 1;
 
     /**
-     * Se convertirá el lab para ser editado con el labcreator, es decir, teniendo en cuenta el OFFSET.
+     * Se convertira el {@link Lab} para ser editado con el labcreator, es decir, teniendo en cuenta el OFFSET.
      */
     public static final int CONVERT_TYPE_CREATOR = 2;
 
     /**
-     * Los Labs será obtenidos tanto de los archivos interna como externa.
+     * Los {@link Lab Labs} seran obtenidos tanto de los archivos interna como externa.
      */
     public static final int SOURCE_BOTH = 1;
 
     /**
-     * Los Labs serán obtenidos de los archivos internos
+     * Los {@link Lab Labs} seran obtenidos de los archivos internos
      */
     public static final int SOURCE_INTERNAL = 2;
 
     /**
-     * Los Labs serán obtenidos de los archivos externos
+     * Los {@link Lab Labs} seran obtenidos de los archivos externos
      */
     public static final int SOURCE_EXTERNAL = 3;
 
-
-    public static int source = SOURCE_BOTH;
+    /**
+     * Fuente de los {@link Lab Labs}
+     */
+    private static int source = SOURCE_BOTH;
 
     /**
-     * Devuelve el valor del attributo source
+     * Devuelve el valor del attributo {@link #source}
      *
      * @return de donde provienen los archivos
      */
@@ -63,7 +68,7 @@ public class LabManager {
     }
 
     /**
-     * Configura el valor de source, es decir, de donde provendrán los Labs
+     * Configura el valor de {@link #source}, es decir, de donde provendran los {@link Lab Labs}
      *
      * @param _source fuente de los archivos
      */
@@ -72,10 +77,11 @@ public class LabManager {
     }
 
     /**
-     * Devuelve el objeto Lab número n almacenado en los achivos internos del programa
+     * Devuelve el objeto {@link Lab} numero n almacenado en los achivos internos del programa
      *
-     * @param n el número de elemento a devolver (mayor 1 y 10)
-     * @return objeto Lab decodificado
+     * @param n           el numero de elemento a devolver (mayor 1 y 10)
+     * @param convertType tipo de conversion
+     * @return objeto {@link Lab} decodificado
      */
     public static Lab readInternal(int n, int convertType) {
         if (n > NUM_LABS_INTERNAL || n < 1)
@@ -93,12 +99,13 @@ public class LabManager {
     }
 
     /**
-     * Genera un archivo Json a partir de un objeto lab y lo escribe en un archivo, cuyo nombre se especifica como
-     * parámetro. El archivo debe estar dentro de la carpeta labs, localizada en la ruta donde está el ejecutable.
-     * Si el nombre es nulo, pondrá un por defecto.
+     * Genera un archivo JSON a partir de un objeto {@link Lab} y lo escribe en un archivo, cuyo nombre se especifica como
+     * parametro. El archivo debe estar dentro de la carpeta labs, localizada en la ruta donde esta el ejecutable.
+     * Si el nombre es nulo, se pondra uno por defecto.
      *
-     * @param lab  objeto lab a guardar
+     * @param lab  objeto {@link Lab} a guardar
      * @param name nombre del archivo
+     * @return si se ha generado correctamente
      */
     public static boolean write(Lab lab, String name) {
 
@@ -169,10 +176,11 @@ public class LabManager {
     }
 
     /**
-     * Lee un archivo externo codificado en JSON y lo convierte a un objeto Lab
+     * Lee un archivo externo codificado en JSON y lo convierte a un objeto {@link Lab}.
      *
-     * @param fileName archivo a leer
-     * @return objeto Lab
+     * @param fileName    archivo a leer
+     * @param convertType tipo de conversion
+     * @return objeto {@link Lab}
      */
     public static Lab readExternal(String fileName, int convertType) {
         String s;
@@ -186,6 +194,12 @@ public class LabManager {
         return convertToLab(o, convertType);
     }
 
+    /**
+     * Lee un {@link Lab} de manera aleatoria de la fuente espcificada
+     *
+     * @param convertType tipo de conversion
+     * @return objeto {@link Lab}
+     */
     public static Lab readRandom(int convertType) {
         switch (source) {
             case SOURCE_BOTH:
@@ -197,21 +211,38 @@ public class LabManager {
                 if (getNumLabsExternal() > 0)
                     return readRandomExternal(convertType);
                 else
-                    throw new UnsupportedOperationException("No hay ningún archivo externo!");
+                    throw new UnsupportedOperationException("No hay ningun archivo externo!");
         }
         throw new IllegalStateException("Illegal source value: " + source);
     }
 
+    /**
+     * Lee un {@link Lab} de manera aleatoria de la memoria extenrna
+     *
+     * @param convertType tipo de conversion
+     * @return objeto {@link Lab}
+     */
     public static Lab readRandomExternal(int convertType) {
         int n = Util.randomInteger(getNumLabsExternal());
         String name = "labs/lab" + n + ".json";
         return readExternal(name, convertType);
     }
 
+    /**
+     * Lee un {@link Lab} de manera aleatoria de la memoria interna
+     *
+     * @param convertType tipo de conversion
+     * @return objeto {@link Lab}
+     */
     public static Lab readRandomInternal(int convertType) {
         return readInternal(Util.randomInteger(NUM_LABS_INTERNAL), convertType);
     }
 
+    /**
+     * Numero de {@link Lab Labs} en la memoria externa. Recorre la carpeta para averiguarlo.
+     *
+     * @return numero de {@link Lab Labs} en la memoria externa.
+     */
     public static int getNumLabsExternal() {
         File tmpDir = new File("labs");
         if (!tmpDir.exists())
@@ -227,10 +258,10 @@ public class LabManager {
     }
 
     /**
-     * Convierte un objeto JSON codificado siguiente las instrucciones de esta clase a un objeto Lab
+     * Convierte un objeto JSON codificado siguiente las instrucciones de esta clase a un objeto {@link Lab}
      *
-     * @param o objeto JSON con la información
-     * @return objeto Lab
+     * @param o objeto {@link JSONObject} con la informacion
+     * @return objeto {@link Lab}
      */
     private static Lab convertToLab(JSONObject o, int convertType) {
         JSONObject size_o = (JSONObject) o.get("size");

@@ -11,23 +11,43 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Esta clase define y configura las diferntes combinaciones de estilos que se pueden aplicar al canvas.
+ * Esta clase define y configura las diferntes combinaciones de estilos que se pueden aplicar al {@link Dibujo}.
  */
 
 public class Styler {
 
+    /**
+     * Estilo aleatorio
+     */
     public static final int RANDOM = 0;
 
+    /**
+     * Estilo rojo vivo
+     */
     public static final int LIVELY_RED = 1;
 
+    /**
+     * Estilo azul futuro
+     */
     public static final int FUTURE = 2;
 
+    /**
+     * Estilo azul chocante
+     */
     public static final int STRIKING_BLUE = 3;
 
+    /**
+     * Estilo por defecto
+     */
     public static final int DEFAULT = RANDOM;
 
-    public static int style = DEFAULT;
+    private static int style = DEFAULT;
 
+    /**
+     * Devuelve el estilo actual
+     *
+     * @return estilo actual
+     */
     public static int getStyle() {
         return style;
     }
@@ -56,15 +76,11 @@ public class Styler {
         setStyle((int) (Math.random() * 3) + 1);
     }
 
-    public static Map<String, Integer> getStyleList() {
-        Map<String, Integer> estilos = new HashMap<>();
-        estilos.put("Aleatorio", RANDOM);
-        estilos.put("Rosa vivo", LIVELY_RED);
-        estilos.put("Azul chocante", STRIKING_BLUE);
-        estilos.put("Azul futuro", FUTURE);
-        return estilos;
-    }
-
+    /**
+     * Configura el estilo
+     *
+     * @param _style nuevo estilo
+     */
     public static void setStyle(int _style) {
         switch (_style) {
             case RANDOM:
@@ -83,6 +99,20 @@ public class Styler {
                 throw new IllegalArgumentException("Illegal value for style: " + _style);
         }
         style = _style;
+    }
+
+    /**
+     * Devuelve un map con el nombre humano de los estilos (claves) y su entero correspondiente (valores).
+     *
+     * @return mapa con todos los estilos
+     */
+    public static Map<String, Integer> getStyleList() {
+        Map<String, Integer> estilos = new HashMap<>();
+        estilos.put("Aleatorio", RANDOM);
+        estilos.put("Rosa vivo", LIVELY_RED);
+        estilos.put("Azul chocante", STRIKING_BLUE);
+        estilos.put("Azul futuro", FUTURE);
+        return estilos;
     }
 
 }

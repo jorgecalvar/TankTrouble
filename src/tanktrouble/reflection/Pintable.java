@@ -9,9 +9,9 @@ import java.awt.*;
 public interface Pintable {
 
     /**
-     * Pinta el objeto utilizando el parámetro
+     * Pinta el objeto sobre el objeto {@link Graphics}.
      *
-     * @param g Dónde se pintar el objeto
+     * @param g Donde se pintar el objeto
      */
     void pintar(Graphics2D g);
 

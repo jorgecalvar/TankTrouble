@@ -16,59 +16,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Esta clase representa al canvas en el que el usuario podrá diseñar objetos Labs, es decir, laberintos en los que
- * posteriormente se podrá jugar.
+ * Esta clase representa al canvas en el que el usuario podra diseñar objetos {@link Lab}, es decir, laberintos en los que
+ * posteriormente se podra jugar.
  */
 public class CreatorCanvas extends Canvas {
 
     /**
-     * Espacio extra dejado en todos los lados del canvas para que los Dots tengan un padding.
+     * Espacio extra dejado en todos los lados del canvas para que los {@link Dot Dots} tengan un padding.
      * La red de puntos no empieza en el (0,0), sino en el (OFFSET, OFFSET)
      */
     public static final int OFFSET = 10 + Dot.DIAMETER / 2;
 
     /**
-     * Separación entre los Dots.
+     * Separacion entre los {@link Dot Dots}.
      */
     public static final int LONGITUD = 100;
 
     /**
-     * Máxima dimensión que se puede dibujar, que determina el tamaño de la red de Dots.
+     * Maxima dimension que se puede dibujar, que determina el tamaño de la red de {@link Dot Dots}.
      */
     public static final Dimension MAX_DIMENSION = new Dimension(1200, 600);
 
     /**
-     * Color de los Dots
+     * Color de los {@link Dot Dots}.
      */
     public static final Color COLOR_DOT = new Color(0x2d4159);
 
     /**
-     * Color de un Dot cuando ha sido seleccionado
+     * Color de un {@link Dot} cuando ha sido seleccionado
      */
     public static final Color COLOR_DOT_SELECTED = COLOR_DOT.brighter().brighter();
 
     /**
-     * Color de fondo del canvas
+     * Color de fondo del {@link CreatorCanvas}
      */
     public static final Color COLOR_BG = new Color(0xf7f9fb);
 
     /**
-     * Color del rectángulo que representa al tanque
+     * Color del rectangulo que representa al {@link Tanque}
      */
     public static final Color COLOR_TANQUE = new Color(0x31708e);
 
     /**
-     * Anchura del rectángulo que representa al tanque
+     * Anchura del rectangulo que representa al {@link Tanque}
      */
     public static final int TANQUE_WIDTH = (int) Math.ceil(Tanque.BASE_WIDTH + (1 - Tanque.CANNON_FACTOR) * Tanque.CANNON_WIDTH);
 
     /**
-     * ALtura del rectángulo que representa al tanque
+     * ALtura del rectangulo que representa al {@link Tanque}
      */
     public static final int TANQUE_HEIGHT = (int) Math.ceil(Tanque.BASE_HEIGTH);
 
     /**
-     * El canvas no está en ningún estado de pintado o borrado.
+     * El {@link CreatorCanvas} no esta en ningun estado de pintado o borrado.
      */
     public static final int STATE_NONE = 0;
 
@@ -83,17 +83,17 @@ public class CreatorCanvas extends Canvas {
     public static final int STATE_BORRAR = 2;
 
     /**
-     * Estado de pintar los rectángulos que representan a los tanques
+     * Estado de pintar los rectangulos que representan a los {@link Tanque tanques}
      */
     public static final int STATE_CREAR_TANQUE = 3;
 
     /**
-     * Estado de borrar los rectángulos que representan a los tanques
+     * Estado de borrar los rectangulos que representan a los {@link Tanque tanques}
      */
     public static final int STATE_BORRAR_TANQUE = 4;
 
     /**
-     * JFrame en el que está contenido este canvas
+     * Ventana en la que esta contenido este canvas
      */
     private CreateWindow window;
 
@@ -103,22 +103,22 @@ public class CreatorCanvas extends Canvas {
     private int state;
 
     /**
-     * Dimensión aplicada por el usuario, es decir, el tamaño de lab que se está dibujando.
+     * Dimension aplicada por el usuario, es decir, el tamaño de lab que se esta dibujando.
      */
     private Dimension dimension;
 
     /**
-     * Lista con todos los Dots de la red
+     * Lista con todos los {@link Dot Dots} de la red
      */
     private List<Dot> dots = new ArrayList<>();
 
     /**
-     * Primer dot en el que se ha hecho click, null si no hay ninguno seleccionado.
+     * Primer {@link Dot} en el que se ha hecho click, null si no hay ninguno seleccionado.
      */
     private Dot firstDot;
 
     /**
-     * Segundo dot en el que se ha hecho clic, null si no hay ninguno seleccionado.
+     * Segundo {@link Dot} en el que se ha hecho click, null si no hay ninguno seleccionado.
      */
     private Dot secondDot;
 
@@ -133,9 +133,9 @@ public class CreatorCanvas extends Canvas {
     private List<Rectangle2D> tanques = new ArrayList<>();
 
     /**
-     * Crea un canvas
+     * Inicializa el canvas
      *
-     * @param window JFrame en el que está contenido
+     * @param window Ventana en el que esta contenido
      */
     public CreatorCanvas(CreateWindow window) {
 
@@ -180,9 +180,9 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Configura el valor de la dimensión, pero no crea las paredes correspondientes, ni realiza comprobaciones.
+     * Configura el valor de la dimension, pero no crea las paredes correspondientes, ni realiza comprobaciones.
      *
-     * @param dimension nueva dimensión
+     * @param dimension nueva dimension
      */
     public void setDimension(Dimension dimension) {
         this.dimension = dimension;
@@ -198,7 +198,7 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Crea la red de Dots
+     * Crea la red de {@link Dot Dots}
      */
     private void createDots() {
         for (int x = OFFSET; x <= MAX_DIMENSION.getWidth() + OFFSET; x += LONGITUD) {
@@ -239,9 +239,9 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Aplica una nueva dimensión al canvas. Se borrará todas las paredes y tanque que estén fuera.
+     * Aplica una nueva dimension al canvas. Se borrara todas las {@link Pared paredes} y tanque que esten fuera.
      *
-     * @param dimension nueva dimensión a aplicar
+     * @param dimension nueva dimension a aplicar
      */
     public void aplicarDimension(Dimension dimension) {
         this.dimension = dimension;
@@ -251,7 +251,7 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Método llamada cucando se hace click con el mouse sobre el canvas
+     * Metodo llamada cucando se hace click con el mouse sobre el {@link CreatorCanvas}
      *
      * @param x coordenada x
      * @param y coordenada y
@@ -276,7 +276,7 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Crea un tanque si se puede en la posición especificada. Si no se puede, da un mensaje de aviso.
+     * Crea un tanque si se puede en la posicion especificada. Si no se puede, da un mensaje de aviso.
      *
      * @param x coordenada x
      * @param y coordenada y
@@ -287,11 +287,11 @@ public class CreatorCanvas extends Canvas {
             tanques.add(tanque);
             repaint();
         } else
-            window.warn("Ha elegido una posición inválida para un tanque!");
+            window.warn("Ha elegido una posicion invalida para un tanque!");
     }
 
     /**
-     * Borra un tanque si existe en la posición especificada. No lanza un aviso si no existe.
+     * Borra un tanque si existe en la posicion especificada. No lanza un aviso si no existe.
      *
      * @param x coordenada x
      * @param y coordenada y
@@ -302,11 +302,11 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Comprueba si un rectángulo está en una posición válida, es decir, dentro del tamaño del laberint (dimension) y
-     * no superpuesto con paredes y otros rectángulos que representan a tanques.
+     * Comprueba si un rectangulo esta en una posicion valida, es decir, dentro del tamaño del {@link Lab} (dimension) y
+     * no superpuesto con paredes y otros rectangulos que representan a tanques.
      *
-     * @param tanque réctangulo a comprobar
-     * @return si está en una posición válida
+     * @param tanque rectangulo a comprobar
+     * @return si esta en una posicion valida
      */
     private boolean legalPosition(Rectangle2D tanque) {
         //Dentro del tamaño
@@ -328,10 +328,10 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Comprueba si una pared está en una posición válida, es decir, no superpone a ningún tanque.
+     * Comprueba si una {@link Pared} esta en una posicion valida, es decir, no superpone a ningun tanque.
      *
      * @param pared pared a comprobar
-     * @return si está en una posición válida
+     * @return si esta en una posicion valida
      */
     private boolean legalPosition(Pared pared) {
         //No choca con tanques
@@ -342,8 +342,8 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Método llamdo cuando se ha hecho click en un Dot. Lo almacenará en las variables correspondientes y invocará la
-     * creación o borrado de una pared cuando sea necesario. Por último, manda redibujar el canvas.
+     * Metodo llamdo cuando se ha hecho click en un {@link Dot}. Lo almacenara en las variables correspondientes y invocara la
+     * creacion o borrado de una {@link Pared} cuando sea necesario. Por ultimo, manda redibujar el canvas.
      *
      * @param dot donde se ha hecho click
      */
@@ -372,8 +372,8 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Crea todos las paredes en la línea que uno los dos Dots en los que se ha hecho click. No lsa crea alguna de ellas
-     * si ya hay una pared creada en ese lugar o si no está en una posición legal.
+     * Crea todos las {@link Pared paredes} en la linea que uno los dos Dots en los que se ha hecho click. No lsa crea
+     * alguna de ellas si ya hay una {@link Pared} creada en ese lugar o si no esta en una posicion legal.
      */
     private void createPared() {
         List<Pared> paredesToAdd = getParedes();
@@ -385,8 +385,8 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Borra todas las paredes que se encuentran en la línea que une a los dos Dots en los que se ha hecho click. Lanza
-     * un aviso si no se ha borrado ninguna pared.
+     * Borra todas las {@link Pared paredes} que se encuentran en la linea que une a los dos Dots en los que se ha
+     * hecho click. Lanza un aviso si no se ha borrado ninguna {@link Pared}.
      */
     public void deletePared() {
         List<Pared> paredesToDelete = getParedes();
@@ -402,14 +402,14 @@ public class CreatorCanvas extends Canvas {
             }
         }
         if (!paredFound)
-            window.warn("La pared que intenta borrar no es válida");
+            window.warn("La pared que intenta borrar no es valida");
     }
 
     /**
-     * Devuelve una lista con todas las paredes que conforman la línea que une los dos puntos en los que se ha hecho
+     * Devuelve una lista con todas las paredes que conforman la linea que une los dos puntos en los que se ha hecho
      * click.
      *
-     * @return paredes seleccionadas por el usuario
+     * @return {@link Pared Paredes} seleccionadas por el usuario
      */
     private List<Pared> getParedes() {
         try {
@@ -464,8 +464,8 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Devuelve el tipo de pared, siguiendo las constantes definidas en la clase Pared.
-     * Lanza una excepción si la pared que se busca crear no es válida.
+     * Devuelve el tipo de pared, siguiendo las constantes definidas en la clase {@link Pared}.
+     * Lanza una excepcion si la pared que se busca crear no es valida.
      *
      * @return el tipo de pared
      * @throws OperationNotSupportedException si la pared no es ni horizontal ni vertical
@@ -481,8 +481,8 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Borra todas las paredes, todos los tanques y desconfigura la dimension, es decir, será necesario volver a aplicar
-     * un tamaño (dimensión).
+     * Borra todas las {@link Pared paredes}, todos los tanques y desconfigura la dimension, es decir, sera necesario 
+     * volver a aplicar un tamaño (dimension).
      */
     public void borrarTodo() {
         setParedes(new ArrayList<>());
@@ -491,7 +491,7 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Crea toda la pared externa del laberinto, según la dimensión aplicada.
+     * Crea toda la {@link Pared} externa del laberinto, segun la dimension aplicada.
      */
     private void crearParedExterna() {
         for (int x = OFFSET; x < OFFSET + (int) dimension.getWidth(); x += LONGITUD) {
@@ -507,8 +507,8 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Comprueba si los dos Dots en los que se ha hecho click son válidos, es decir, al menos uno de ellas está
-     * completamente dentro del borde externo (dimensión) y el otro está o dentro o en el borde externo.
+     * Comprueba si los dos {@link Dot Dots} en los que se ha hecho click son validos, es decir, al menos uno de ellas esta
+     * completamente dentro del borde externo (dimension) y el otro esta o dentro o en el borde externo.
      */
     private boolean validDots() {
         Point2D firstDotLoc = firstDot.getLoc();
@@ -525,7 +525,7 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Borra todas las paredes y tanques que están fuera o solapanda con el borde externo.
+     * Borra todas las {@link Pared paredes} y tanques que estan fuera o solapanda con el borde externo.
      */
     private void borrarFueraTamano() {
         //Paredes
@@ -543,14 +543,14 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Crea el objeto laberino que se corresponde que el dibujo actual.
+     * Crea el objeto {@link Lab} que se corresponde que el dibujo actual.
      *
      * @return objeto Lab dibujado
-     * @throws UnsupportedOperationException si no se reúnen las características para crearlo.
+     * @throws UnsupportedOperationException si no se reunen las caracteristicas para crearlo.
      */
     public Lab createLab() {
         if (!validLab())
-            throw new UnsupportedOperationException("No se ha podido crear el laberinto, ya que no reúne las condiciones necesarias!");
+            throw new UnsupportedOperationException("No se ha podido crear el laberinto, ya que no reune las condiciones necesarias!");
         List<Pared> paredesLab = new ArrayList<>();
         for (Pared pared : paredes) {
             Point2D start = pared.getStart();
@@ -564,10 +564,10 @@ public class CreatorCanvas extends Canvas {
     }
 
     /**
-     * Comprueba si el dibujo actual reúne las carácterísticas necesarias para creaa un objeto Lab, es decir, se ha
-     * aplicado un tamaño y se han añadido dos tanques.
+     * Comprueba si el dibujo actual reune las caracteristicas necesarias para creaa un objeto {@link Lab}, es decir,
+     * se ha aplicado un tamano y se han añadido dos tanques.
      *
-     * @return si se puede crear un objeto Lab
+     * @return si se puede crear un objeto {@link Lab}
      */
     private boolean validLab() {
         return tanques.size() == 2 && dimension != null;

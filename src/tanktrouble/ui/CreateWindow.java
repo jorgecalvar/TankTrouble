@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.Map;
 
 /**
- * Esta clase representa a la ventana en la que el usuario diseñará objetos Lab.
+ * Esta clase representa a la ventana en la que el usuario diseñará objetos {@link Lab}.
  */
 public class CreateWindow extends JFrame {
 
@@ -41,6 +41,9 @@ public class CreateWindow extends JFrame {
     private CreatorCanvas canvas;
 
 
+    /**
+     * Inicia la venta y sus componentes.
+     */
     public CreateWindow() {
         setTitle("Tank Trouble | Crear Laberinto");
         setLayout(new BorderLayout());
@@ -118,7 +121,7 @@ public class CreateWindow extends JFrame {
 
     /**
      * Si está seleccionado, cambia el estado del canvas a STATE_PINTAR y desselecciona los demás
-     * JToggleButton. Si no está selecciondao, cambia el estado del canvas a STATE_NONE:
+     * {@link JToggleButton}. Si no está selecciondao, cambia el estado del canvas a {@link CreatorCanvas#STATE_NONE}.
      */
     private void pintarClicked() {
         if (btnPintar.isSelected()) {
@@ -131,8 +134,9 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Si está seleccionado, cambia el estado del canvas a STATE_BORRAR y desselecciona los demás
-     * JToggleButton. Si no está selecciondao, cambia el estado del canvas a STATE_NONE:
+     * Si esta seleccionado, cambia el estado del {@link CreatorCanvas} a {@link CreatorCanvas#STATE_BORRAR} y
+     * desselecciona los demas {@link JToggleButton}. Si no esta selecciondao, cambia el estado del
+     * {@link CreatorCanvas} a {@link CreatorCanvas#STATE_NONE}.
      */
     private void borrarClicked() {
         if (btnBorrar.isSelected()) {
@@ -146,8 +150,9 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Si está seleccionado, cambia el estado del canvas a STATE_CREAR_TANQUE y desselecciona los demás
-     * JToggleButton. Si no está selecciondao, cambia el estado del canvas a STATE_NONE:
+     * Si esta seleccionado, cambia el estado del {@link CreatorCanvas} a {@link CreatorCanvas#STATE_CREAR_TANQUE}
+     * y desselecciona los demas {@link JToggleButton}. Si no esta selecciondao, cambia el estado del
+     * {@link CreatorCanvas} a {@link CreatorCanvas#STATE_NONE}.
      */
     private void crearTanqueClicked() {
         if (btnCrearTanque.isSelected()) {
@@ -160,8 +165,9 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Si está seleccionado, cambia el estado del canvas a STATE_BORRAR_TANQUE y desselecciona los demás
-     * JToggleButton. Si no está selecciondao, cambia el estado del canvas a STATE_NONE:
+     * Si esta seleccionado, cambia el estado del {@link CreatorCanvas} a {@link CreatorCanvas#STATE_BORRAR_TANQUE} y
+     * desselecciona los demas {@link JToggleButton}. Si no esta selecciondao, cambia el estado del {@link CreatorCanvas}
+     * a {@link CreatorCanvas#STATE_NONE}:
      */
     private void borrarTanqueClicked() {
         if (btnBorrarTanque.isSelected()) {
@@ -175,20 +181,21 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Borra todos los objetos del tanque, llamado al método correspondiente de CreatorCanvas.
+     * Borra todos los objetos del {@link Lab}, llamado al método correspondiente de {@link CreatorCanvas}.
      */
     private void borrarTodoClicked() {
         canvas.borrarTodo();
     }
 
     /**
-     * Lee un archivo laboratorio.
+     * Lee un archivo que contiene un {@link Lab} en formato json.
      */
     private void importarClicked() {
         String name = input("Introduzca el nombre del archivo a leer.\n" +
                 "Debe estar en una carpeta llamada 'labs' en el directorio donde está el juego.\n" +
                 "Un ejemplo de nombre es: lab5.json");
-        if (name == null || name.isEmpty() || !name.substring(name.length() - 5).equals(".json")) {
+        if (name == null) return;
+        if (name.isEmpty() || !name.substring(name.length() - 5).equals(".json")) {
             warn("No ha introducido un nombre válido.");
             return;
         }
@@ -202,7 +209,7 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Guarda el objeto Lab que está dibujado. Avisa al usuario tanto si ha habido algún error como si se realiza
+     * Guarda el objeto {@link Lab} que esta dibujado. Avisa al usuario tanto si ha habido algún error como si se realiza
      * correctamente.
      */
     private void exportarClicked() {
@@ -211,6 +218,7 @@ public class CreateWindow extends JFrame {
             String name = input("Introduzca el nombre del archivo.\n" +
                     "La extensión debe ser .json.\n" +
                     "Deje el campo en blanco para poner el nombre por defecto");
+            if (name == null) return;
             if (name.isEmpty() || !name.substring(name.length() - 5).equals(".json")) name = null;
             if (LabManager.write(lab, name))
                 info("Se ha exportado correctamente!");
@@ -222,14 +230,14 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Llama al método showAyuda()
+     * Llama al método {@link #showAyuda()}
      */
     private void ayudaClicked() {
         showAyuda();
     }
 
     /**
-     * Vuelve a la pestaña principal del juego.
+     * Vuelve a la pestaña principal del juego: {@link InicioWindow}.
      */
     private void salirClicked() {
         setVisible(false);
@@ -238,7 +246,7 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Muestra un diálogo con ayuda al usuario
+     * Muestra un dialogo con ayuda al usuario
      */
     public void showAyuda() {
         String sb = "¿Como usar el creador de laberintos?\n" +
@@ -252,7 +260,7 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Muestra un diálogo de información
+     * Muestra un dialogo de información
      *
      * @param txt mensaje a mostrar
      */
@@ -261,7 +269,7 @@ public class CreateWindow extends JFrame {
     }
 
     /**
-     * Muestra un diálogo de aviso
+     * Muestra un dialogo de aviso
      *
      * @param txt mensaje a mostrar
      */
@@ -269,6 +277,12 @@ public class CreateWindow extends JFrame {
         Util.warn(txt, this);
     }
 
+    /**
+     * Solicita información al usuario.
+     *
+     * @param txt mensaje a mostrar
+     * @return información introducida por el usuario
+     */
     public String input(String txt) {
         return Util.input(txt, this);
     }

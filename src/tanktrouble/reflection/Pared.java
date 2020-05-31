@@ -5,29 +5,29 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * Esta clase define a las paredes del laberinto. Cada pared es necesariamente una línea recta que debe ser o bien
- * horizontal o bien vertical.
+ * Esta clase define a las {@link Pared paredes} del {@link Lab}. Cada {@link Pared} es necesariamente una linea recta
+ * que debe ser o bien horizontal o bien vertical.
  */
 
 public class Pared implements Pintable {
 
     /**
-     * Tipo que tienee las paredes horizontales
+     * Tipo que tienen las {@link Pared paredes} horizontales
      */
     public static final int TIPO_HORIZONTAL = 1;
 
     /**
-     * Tipo que tienen las paredes vertiacales
+     * Tipo que tienen las {@link Pared paredes} vertiacales
      */
     public static final int TIPO_VERTICAL = 2;
 
     /**
-     * Grosor de la pred
+     * Grosor de la {@link Pared}.
      */
     public static final int GROSOR = 5;
 
     /**
-     * Color de las paredes
+     * Color de las {@link Pared paredes}.
      */
     public static Color COLOR;
 
@@ -39,6 +39,13 @@ public class Pared implements Pintable {
 
     private Rectangle2D rectangle;
 
+    /**
+     * Inicializa una {@link Pared}.
+     *
+     * @param start    posicion inicial
+     * @param longitud longitud en pixeles
+     * @param tipo     tipo: vertical y horizontal
+     */
     public Pared(Point2D start, int longitud, int tipo) {
         this.start = start;
         this.longitud = longitud;
@@ -47,47 +54,47 @@ public class Pared implements Pintable {
     }
 
     /**
-     * Configura el color de las paredes
+     * Configura el {@link Color} de las paredes
      *
-     * @param c color a configurar
+     * @param c {@link Color} a configurar
      */
     public static void setColor(Color c) {
         COLOR = c;
     }
 
     /**
-     * Devuelve la longitud de la pared
+     * Devuelve la longitud de la {@link Pared}
      *
-     * @return longitud de la pared
+     * @return longitud de la {@link Pared}
      */
     public int getLongitud() {
         return longitud;
     }
 
     /**
-     * Devuelve el tipo de la pared, que puede ser horizontal o vertical
+     * Devuelve el tipo de la {@link Pared}, que puede ser {@link #TIPO_HORIZONTAL} o {@link #TIPO_VERTICAL}.
      *
-     * @return tipo de la pared
+     * @return tipo de la {@link Pared}
      */
     public int getTipo() {
         return tipo;
     }
 
     /**
-     * Obtiene el punto donde empieza la pared, es decir, el punto con menores coordendas de la línea imaginaria que
-     * delimita la pared
+     * Obtiene el punto donde empieza la {@link Pared}, es decir, el punto con menores coordendas de la linea imaginaria que
+     * delimita la {@link Pared}
      *
-     * @return Punto donde empieza la pared
+     * @return Punto donde empieza la {@link Pared}.
      */
     public Point2D getStart() {
         return start;
     }
 
     /**
-     * Obtiene el punto donde termina la pared, es decir, el punto con mayores coordendas de la línea imaginaria que
-     * delimita la pared
+     * Obtiene el punto donde termina la {@link Pared}, es decir, el punto con mayores coordendas de la linea imaginaria que
+     * delimita la {@link Pared}.
      *
-     * @return Punto donde termina la pared
+     * @return Punto donde termina la {@link Pared}
      */
     public Point2D getEnd() {
         if (tipo == TIPO_HORIZONTAL)
@@ -96,9 +103,9 @@ public class Pared implements Pintable {
     }
 
     /**
-     * Devuelve el rectángulo que incluye la pared compelta, es decir, teniendo en cuenta el grosor
+     * Devuelve el rectangulo que incluye la {@link Pared} compelta, es decir, teniendo en cuenta el grosor
      *
-     * @return Rectángulo correspondiente a la pared
+     * @return Rectangulo correspondiente a la {@link Pared}
      */
     public Rectangle2D getRectangle() {
         return rectangle;

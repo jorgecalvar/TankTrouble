@@ -8,25 +8,25 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 /**
- * Area (con forma de circulo) que representa al cada uno de los puntos que conforman la red de puntos del CreatorCanvas
- * sobre la que el usuario dibujará sus laberintos personalizados.
+ * {@link Area} (con forma de circulo) que representa al cada uno de los puntos que conforman la red de puntos del
+ * {@link CreatorCanvas} sobre la que el usuario dibujara sus laberintos personalizados.
  */
 public class Dot extends Area implements Pintable {
 
     /**
-     * Diámetro de cada punto
+     * Diametro de cada punto
      */
     public static final int DIAMETER = 24;
 
     /**
-     * Posición de cada punto (centro del círculo)
+     * Posicion de cada punto (centro del circulo)
      */
     private Point2D loc;
 
     /**
-     * Crea un objeto Dot.
+     * Crea un objeto {@link Dot}.
      *
-     * @param loc posición del centro
+     * @param loc posicion del centro
      */
     public Dot(Point2D loc) {
         this.loc = loc;
@@ -34,9 +34,9 @@ public class Dot extends Area implements Pintable {
     }
 
     /**
-     * Devuelve la posición del objeto
+     * Devuelve la posicion del objeto
      *
-     * @return posición del obeto
+     * @return posicion del obeto
      */
     public Point2D getLoc() {
         return loc;
@@ -45,7 +45,7 @@ public class Dot extends Area implements Pintable {
     /**
      * Pinta el objeto
      *
-     * @param g Dónde se pinta el objeto
+     * @param g Donde se pinta el objeto
      */
     @Override
     public void pintar(Graphics2D g) {

@@ -9,14 +9,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
+/**
+ * Ventana que permite configurar distintas opciones del juego.
+ */
 public class OptionsWindow extends JFrame {
 
+    /**
+     * Mapa con los diferntes estilos permitidos.
+     */
     public static final Map<String, Integer> ESTILOS = Styler.getStyleList();
 
+    /**
+     * Mapa con los diferntes rendering permitidos.
+     */
     public static final Map<String, Integer> RENDERING = Map.of("Suave", Dibujo.RENDERING_LIGHT,
             "Moderado", Dibujo.RENDERING_MODERATE,
             "Intenso", Dibujo.REDERING_INTENSE);
 
+    /**
+     * Mapa con las diferentes fuentes de {@link tanktrouble.reflection.Lab} permitidos.
+     */
     public static final Map<String, Integer> SOURCES = Map.of("Aleatorio", LabManager.SOURCE_BOTH,
             "Interna", LabManager.SOURCE_INTERNAL,
             "Externa", LabManager.SOURCE_EXTERNAL);
@@ -27,6 +39,12 @@ public class OptionsWindow extends JFrame {
     private JComboBox<String> cbSource;
     private JCheckBox cbSonido;
 
+    //TODO Add Option for sensibility when rotating
+    //TODO Add Option to select default key
+
+    /**
+     * Inicializ la ventana de opciones.
+     */
     public OptionsWindow() {
 
         //setLayout(new GridLayout(3, 1, 10, 5));
@@ -147,8 +165,5 @@ public class OptionsWindow extends JFrame {
         Sonido.setState(cbSonido.isSelected() ? Sonido.STATE_ON : Sonido.STATE_OFF);
     }
 
-    public static void main(String[] args) {
-        new OptionsWindow();
-    }
 
 }

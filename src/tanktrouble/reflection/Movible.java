@@ -9,81 +9,115 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * Este clase define a todas las formas que se dibujan sobre el Dibujo y que tienen un movimiento. Se los define mediante
- * una posición y un ángulo.
+ * Este clase define a todas las formas que se dibujan sobre el {@link Dibujo} y que tienen un movimiento. Se los define
+ * mediante una posicion y un angulo.
  * <p>
- * Los métodos diseñados para permitir el movimiento de los objetos son avanzar(int distancia) y rotar(double theta), ya
- * que antes de permitir el movimiento comprueban que el nuevo estado del objeto cumplirá las restricciones de posición.
- * Sin embargo, también es posible forzar un cambio en el movimiento mediante métodos como setPoisicón(...), setTheta(...)
- * o rotaIgnoraRestricciones(...).
+ * Los metodos diseñados para permitir el movimiento de los objetos son {@link #avanza(int)} y {@link #rota(double)} , ya
+ * que antes de permitir el movimiento comprueban que el nuevo estado del objeto cumplira las restricciones de posicion.
+ * Sin embargo, tambien es posible forzar un cambio en el movimiento mediante metodos como {@link #setPosicion(Point2D)},
+ * {@link #setTheta(double)} o {@link #rotaIgnoraRestricciones(double)}.
  * <p>
- * IMPORTANTE: Los métodos encargados de cambiar la posición del tanque vigilarán que la nueva posición cumpla estas
- * restricciones.
+ * Las restricciones de posicion que debe cumplir cualquier objeto {@link Movible} en el {@link Dibujo} son las siguientes:
+ * 1. Debe encontrarse en el interior de los limites exteriores del {@link Lab}.
+ * 2. No puedue solapar ninguna de las {@link Pared paredes} interiores del {@link Lab}.
+ * 3. No puede solapar a ninguno de los objetos {@link Tanque} que se encuentran en el {@link Lab}.
  * <p>
- * Las restricciones de posición que debe cumplir cualquier objeto movible en el Dibujo son las siguientes:
- * 1. Debe encontrarse en el interior de los límites exteriores del Laberinto (objeto Lab)
- * 2. No puedue solapar ninguna de las paredes interiores del laberinto.
- * 3. No puede solapar a ninguno de los objetos tanque que se encuentran en el laberinto.
- * <p>
- * Nótese: que un otros objetos Movible distinto de tanque sí pueden solaparse pero ninguno podrá solapar un tanque o
- * un tanque solapar a otro tanque.
+ * Notese: que otros objetos {@link Movible} distintos de {@link Tanque} si pueden solaparse pero ninguno podra solapar
+ * un {@link Tanque} o un {@link Tanque} solapar a otro {@link Tanque}.
  */
 public abstract class Movible extends Area implements Pintable {
 
     /**
-     * Offset utilizado cuando se comprueba si hay laberinto en alguno de los lados del objeto movible.
+     * Offset utilizado cuando se comprueba si hay {@link Lab} en alguno de los lados del objeto {@link Movible}.
      */
     public static final int OFFSET = 2;
 
+    /**
+     * Posicion en la que se encuentra el objeto, generalmetne representada por el punto superior izquierdo.
+     */
     protected Point2D posicion;
+
+    /**
+     * Angulo del objeto, respecto al eje x positivo, en sentido positivo hacia el eje y positivo.
+     */
     protected double theta;
+
+    /**
+     * Transformacion afin creada por la posicion y angulo concretos.
+     */
     protected AffineTransform at;
 
+    /**
+     * {@link Dibujo} en el que se enmarca este objeto.
+     */
     protected Dibujo dibujo;
 
+    /**
+     * Crea un objeto {@link Movible} con una {@link #posicion}, {@link #theta} y {@link #dibujo} concretos.
+     *
+     * @param posicion posicion inicial
+     * @param theta    angulo inicial
+     * @param dibujo   {@link Dibujo} en el que se encuentra.
+     */
     public Movible(Point2D posicion, double theta, Dibujo dibujo) {
         this.dibujo = dibujo;
         setTheta(theta);
         setPosicion(posicion);
     }
 
-
+    /**
+     * Devuelve la {@link #posicion} del objeto.
+     *
+     * @return {@link #posicion}
+     */
     public Point2D getPosicion() {
         return posicion;
     }
 
     /**
-     * Da un nuevo valor al parámetro posición
+     * Da un nuevo valor al parametro {@link #posicion}
      *
-     * @param posicion Nuevo valor de la posición
+     * @param posicion Nuevo valor de la {@link #posicion}
      */
     public void setPosicion(Point2D posicion) {
         this.posicion = posicion;
-        at = AffineTransform.getRotateInstance(theta, posicion.getX(), posicion.getY());
-        createArea();
+        if (posicion != null) {
+            at = AffineTransform.getRotateInstance(theta, posicion.getX(), posicion.getY());
+            createArea();
+        }
     }
 
+    /**
+     * Devuelve el {@link #theta angulo} del objeto.
+     *
+     * @return {@link #theta}
+     */
     public double getTheta() {
         return theta;
     }
 
     /**
-     * Da un nuevo al parámetro theta entre 0 y 2PI
+     * Da un nuevo valor a {@link #theta} entre 0 y 2PI
      *
-     * @param theta Nuevo valor de theta
+     * @param theta Nuevo valor de {@link #theta}
      */
     public void setTheta(double theta) {
         this.theta = Util.formatAngle(theta);
     }
 
+    /**
+     * Devuelve el {@link #dibujo} actual.
+     *
+     * @return {@link #dibujo}
+     */
     public Dibujo getDibujo() {
         return dibujo;
     }
 
     /**
-     * Calcula si la base de este tanque intersecta con el laberinto en el que se encuentra
+     * Calcula si la base de este {@link Movible} intersecta con el {@link Lab} en el que se encuentra
      *
-     * @return Si el tanque intersecta el laberinto
+     * @return Si el {@link Movible} intersecta el laberinto
      */
     public boolean overlapsLab() {
         Area a = (Area) dibujo.getLab().clone();
@@ -92,19 +126,20 @@ public abstract class Movible extends Area implements Pintable {
     }
 
     /**
-     * Calcula si el objeto cumple las restricciones de posición.
+     * Calcula si el objeto cumple las restricciones de posicion.
      *
-     * @return Si e tanque cumple sus restricciones de posición
+     * @return Si el {@link Movible} cumple sus restricciones de posicion
      */
     public boolean illegalPosition() {
         return illegalPosition(null);
     }
 
     /**
-     * Comprueba si el tanque cumple las restricciones de posición de su dibujo sin tener en cuenta el tanque ignore
+     * Comprueba si el {@link Movible} cumple las restricciones de posicion de su dibujo sin tener en cuenta el
+     * {@link Tanque} ignore
      *
-     * @param ignore tanque que se ignorá en la comprobación
-     * @return si el tanque cumple con las restricciones de posición
+     * @param ignore {@link Tanque} que se ignora en la comprobacion
+     * @return si el {@link Movible} cumple con las restricciones de posicion
      */
     public boolean illegalPosition(Tanque ignore) {
         return overlapsLab() || overlapsTanques(ignore);
@@ -112,8 +147,10 @@ public abstract class Movible extends Area implements Pintable {
 
 
     /**
-     * Comprueba si este tanque se solapa con cualquier de los tanque que hay en el dibujo
+     * Comprueba si este {@link Movible} se solapa con cualquier de los {@link Tanque tanques} que hay en el dibujo,
+     * excepto al que se ignora.
      *
+     * @param ignore {@link Tanque} que se ignora en la comprobacion
      * @return si hay solapamiento
      */
     public boolean overlapsTanques(Tanque ignore) {
@@ -125,9 +162,9 @@ public abstract class Movible extends Area implements Pintable {
 
 
     /**
-     * Calcula si este tanque se solapa con otro tanque t
+     * Calcula si este {@link Movible} se solapa con otro {@link Tanque}
      *
-     * @param t tanque con el comprobar el solaparmiento
+     * @param t {@link Tanque} con el comprobar el solaparmiento
      * @return si hay solapamiento
      */
     public boolean overlapsTanque(Tanque t) {
@@ -137,9 +174,10 @@ public abstract class Movible extends Area implements Pintable {
     }
 
     /**
-     * Mueve este movible la distancia especificada siempre que sea posible siguiendo sus restricciones de posición.
+     * Mueve este {@link Movible} la distancia especificada siempre que sea posible siguiendo sus restricciones de
+     * posicion.
      *
-     * @param distancia cistancia que avanzará el tanque
+     * @param distancia distancia que avanzara el {@link Tanque}
      */
     public void avanza(int distancia) {
         int d = calcAvance(distancia);
@@ -149,11 +187,11 @@ public abstract class Movible extends Area implements Pintable {
 
 
     /**
-     * Calcula la mayor distancia menor que el parámetro distancia que puede avanzar el tanque siguiendo sus
-     * restricciones de posición
+     * Calcula la mayor distancia menor que el parametro distancia que puede avanzar el {@link Tanque} siguiendo sus
+     * restricciones de posicion
      *
-     * @param distancia máxima distancia que se desea avanzar
-     * @return máxima distancia posible para avanzar
+     * @param distancia maxima distancia que se desea avanzar
+     * @return maxima distancia posible para avanzar
      */
     protected int calcAvance(int distancia) {
         int i = distancia;
@@ -168,7 +206,7 @@ public abstract class Movible extends Area implements Pintable {
     }
 
     /**
-     * Calcula si el avanza de distancia es posible según las restricciones de posición
+     * Calcula si el avanza de distancia es posible segun las restricciones de posicion
      *
      * @param distancia distancia que se quiere avanzar
      * @return si el avanza es legal
@@ -176,11 +214,11 @@ public abstract class Movible extends Area implements Pintable {
     protected abstract boolean validAvance(int distancia);
 
     /**
-     * Cambia el ángulo del tanque a una nueva posición respecto al centro de masas de la base siguiendo las restriciones
-     * de posición. En caso de no ser posible, rotará el mayor ángulo posible (en valor absoluto) menor que theta que
-     * cumpla con las restricciones.
+     * Cambia el {@link #theta angulo} del {@link Tanque} a una nueva {@link #posicion} respecto al centro de masa de
+     * la base siguiendo las restriciones de posicion. En caso de no ser posible, rotara el mayor angulo posible (en
+     * valor absoluto) menor que parametro theta que cumpla con las restricciones.
      *
-     * @param theta ángulo a rotar
+     * @param theta angulo a rotar
      */
     public void rota(double theta) {
         double t = calcRotacion(theta);
@@ -189,10 +227,10 @@ public abstract class Movible extends Area implements Pintable {
     }
 
     /**
-     * Calcula la máxima rotación posible menor que el parámetro theta que cumpla con las restricciones de posición
+     * Calcula la maxima rotacion posible menor que el parametro theta que cumpla con las restricciones de posicion
      *
-     * @param theta máximmo ángulo a rotar
-     * @return ángulo a rotar
+     * @param theta maximmo angulo a rotar
+     * @return angulo a rotar
      */
     public double calcRotacion(double theta) {
         final double ANGULO_MINIMO = Math.toRadians(1);
@@ -211,18 +249,18 @@ public abstract class Movible extends Area implements Pintable {
     }
 
     /**
-     * Calcula si la rotación de un ángulo determinado es legal según las restricciones de posición
+     * Calcula si la rotacion de un angulo determinado es legal segun las restricciones de posicion
      *
-     * @param theta ángulo que se quiere rotar
-     * @return si la rotación es posible
+     * @param theta angulo que se quiere rotar
+     * @return si la rotacion es posible
      */
     protected abstract boolean validRotation(double theta);
 
     /**
-     * Cambia el ángulo del tanque a una posición respecto al centro de masa de masas sin tener en cuenta las restricciones
-     * de posición
+     * Cambia el {@link #theta angulo} del {@link Movible} a una posicion respecto al centro de masa de masas sin tener
+     * en cuenta las restricciones de posicion
      *
-     * @param theta ángulo a rotar
+     * @param theta angulo a rotar
      */
     public void rotaIgnoraRestricciones(double theta) {
         AffineTransform at2 = AffineTransform.getRotateInstance(theta, posicion.getX(), posicion.getY());
@@ -234,41 +272,53 @@ public abstract class Movible extends Area implements Pintable {
                 posicion.getY() - (newCentro.getY() - oldCentro.getY())));
     }
 
-    public boolean labUp() {
-        Lab lab = dibujo.getLab();
-        Rectangle2D bounds = getBounds();
-        return lab.contains(new Point2D.Double(bounds.getCenterX(), bounds.getMinY() - OFFSET));
-    }
-
-    public boolean labRight() {
-        Lab lab = dibujo.getLab();
-        Rectangle2D bounds = getBounds();
-        return lab.contains(new Point2D.Double(bounds.getMaxX() + OFFSET, bounds.getCenterY()));
-    }
-
-    public boolean labLeft() {
-        Lab lab = dibujo.getLab();
-        Rectangle2D bounds = getBounds();
-        return lab.contains(new Point2D.Double(bounds.getMinX() - OFFSET, bounds.getCenterY()));
-    }
-
-    public boolean labDown() {
-        Lab lab = dibujo.getLab();
-        Rectangle2D bounds = getBounds();
-        return lab.contains(new Point2D.Double(bounds.getCenterX(), bounds.getMaxY() + OFFSET));
-    }
-
     /**
-     * Genera el área de dicho objeto, que se corresponde con la parte de dicho objeto que "chocará" con otros en el
-     * Dibujo.
+     * Genera el {@link Area} de dicho objeto, que se corresponde con la parte de dicho objeto que "chocara" con otros
+     * en el {@link Dibujo}.
      */
     protected abstract void createArea();
 
     /**
-     * Obtiene el centro de masas del objeto, que se utilizará para rotar sobre él
+     * Obtiene el centro de masas del objeto, que se utilizara para rotar sobre el.
      *
      * @return centro de masas
      */
-    abstract Point2D getMassCenter();
+    public abstract Point2D getMassCenter();
+
+    /**
+     * Si hay un obstaculo sobre el {@link Movible}
+     *
+     * @return si hay un obstaculo sobre el {@link Movible}
+     */
+    public abstract boolean hasObstacleOver();
+
+    /**
+     * Si hay un obstaculo a la derecha del {@link Movible}
+     *
+     * @return si hay un obstaculo a la derecha del {@link Movible}
+     */
+    public abstract boolean hasObstacleRight();
+
+    /**
+     * Si hay un obstaculo a la izquierda del {@link Movible}
+     *
+     * @return si hay un obstaculo a la izquierda del {@link Movible}
+     */
+    public abstract boolean hasObstacleLeft();
+
+    /**
+     * Si hay un obstaculo bajo el {@link Movible}
+     *
+     * @return si hay un obstaculo bajo el {@link Movible}
+     */
+    public abstract boolean hasObstacleBelow();
+
+    /**
+     * Devuelve el rectangulo que debe repintarse para garantizar que el dibujo se actualiza respecto a la posicion
+     * pasado.
+     *
+     * @return rectangulo que debe repintarse.
+     */
+    public abstract Rectangle2D getRepaintBounds();
 
 }

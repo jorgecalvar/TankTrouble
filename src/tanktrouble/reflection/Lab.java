@@ -15,14 +15,14 @@ import java.util.Map;
 import static tanktrouble.reflection.Pared.GROSOR;
 
 /**
- * Esta clase define al objeto laberinto en su conjunto. Hereda de la clase área, lo que facilitará luego calcular las
- * intersecciones con otros objetos.
+ * Esta clase define al objeto {@link Lab laberinto} en su conjunto. Hereda de la clase {@link Area}, lo que facilitara
+ * luego calcular las intersecciones con otros objetos.
  */
 
 public class Lab extends Area implements Pintable {
 
     /**
-     * Color de fondo del interior del laberinto
+     * Color de fondo del interior del {@link Lab}
      */
     public static Color COLOR_BG;
 
@@ -33,13 +33,22 @@ public class Lab extends Area implements Pintable {
     private List<Point2D> tanques;
 
     /**
-     * Un punto es un vértice si y solo si:
-     * 1. Exactamente dos líneas contienen ese punto
-     * 2. Cada una de las dos líneas empieza o termina en dicho punto.
+     * Un punto es un vertice si y solo si:
+     * 1. Exactamente dos lineas contienen ese punto
+     * 2. Cada una de las dos lineas empieza o termina en dicho punto.
      */
     private List<Point2D> vertices;
 
+    private boolean labDrawn;
 
+
+    /**
+     * Inicializa el {@link Lab}
+     *
+     * @param size    tamano en pixeles
+     * @param paredes lista con las {@link Pared paredes}
+     * @param tanques lista con la posicion inicial de los {@link Tanque tanques}
+     */
     public Lab(Dimension size, List<Pared> paredes, List<Point2D> tanques) {
         super();
         this.paredes = paredes;
@@ -49,13 +58,14 @@ public class Lab extends Area implements Pintable {
         this.vertices = new ArrayList<>();
         this.tanques = tanques;
         calcularVertices();
+        labDrawn = false;
     }
 
     /**
-     * Lee un Lab para jugar aleatorio de los archivos internos y externos (si existen). Devuelve null si no se
-     * encuentra ningún Lab válido tras 10 intentos.
+     * Lee un {@link Lab} para jugar aleatorio de los archivos internos y externos (si existen). Devuelve null si no se
+     * encuentra ningun Lab valido tras 10 intentos.
      *
-     * @return Lab para ser jugado
+     * @return {@link Lab} para ser jugado
      */
     public static Lab createRamdomLab() {
         Lab lab;
@@ -69,15 +79,21 @@ public class Lab extends Area implements Pintable {
         return lab;
     }
 
+    /**
+     * Devuelve si una dimension concreta de un {@link Lab} se puede jugar en este dispositivo.
+     *
+     * @param size dimension a comprobar
+     * @return si se puede jugar
+     */
     public static boolean validLabSize(Dimension size) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         return size.getWidth() + 100 < screenSize.getWidth() && size.getHeight() + 150 < screenSize.getHeight();
     }
 
     /**
-     * For this game, a minimum screen size of 850x600 is required.
+     * Devuelve si este dispositivo tiene suficiente tamano de pantalla para ejecutar el juego.
      *
-     * @return is this device can run the game
+     * @return si este dispositivo puede ejecutar el juego
      */
     public static boolean validDevice() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -85,9 +101,9 @@ public class Lab extends Area implements Pintable {
     }
 
     /**
-     * Configura el color de fondo del laberinto
+     * Configura el {@link Color} de fondo del laberinto
      *
-     * @param c color a configurar
+     * @param c {@link Color} a configurar
      */
     public static void setColorBg(Color c) {
         COLOR_BG = c;
@@ -108,27 +124,27 @@ public class Lab extends Area implements Pintable {
     }
 
     /**
-     * Devuelve el tamaño de este laberinto
+     * Devuelve el tamano de este laberinto
      *
-     * @return tamaño del laberinto
+     * @return tamano del laberinto
      */
     public Dimension getSize() {
         return size;
     }
 
     /**
-     * List con todas las paredes de este laberinto
+     * Lista con todas las {@link Pared paredes} de este {@link Lab}.
      *
-     * @return lista con todas las paredes del laberinto
+     * @return lista con todas las {@link Pared paredes} del {@link Lab}
      */
     public List<Pared> getParedes() {
         return paredes;
     }
 
     /**
-     * Devuelve las posiciones iniciales de los tanques en este laberinto
+     * Devuelve las posiciones iniciales de los {@link Tanque tanques} en este {@link Lab}
      *
-     * @return posiciones iniciales de los tanques
+     * @return posiciones iniciales de los {@link Tanque tanques}
      */
     public List<Point2D> getPosicionTanques() {
         return tanques;
@@ -139,7 +155,7 @@ public class Lab extends Area implements Pintable {
     }
 
     /**
-     * Genera automáticamente la lista de vértices siguiendo la definición de vértice.
+     * Genera automaticamente la lista de vertices siguiendo la definicion de vertice.
      */
     private void calcularVertices() {
         Map<Point2D, Integer> ocurrencias = new HashMap<>();
@@ -159,6 +175,11 @@ public class Lab extends Area implements Pintable {
             if (ocurrencias.get(p) == 2)
                 vertices.add(p);
         }
+    }
+
+    public Rectangle2D getRepaintBounds() {
+        labDrawn = true;
+        return this.getBounds2D();
     }
 
 }

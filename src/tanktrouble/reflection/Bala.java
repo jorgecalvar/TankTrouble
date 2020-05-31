@@ -1,16 +1,18 @@
 package tanktrouble.reflection;
 
-import tanktrouble.misc.Sonido;
+import tanktrouble.control.BalasController;
+import tanktrouble.control.Speeder;
 import tanktrouble.ui.Dibujo;
 
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
- * Esta clase define al objeto Bala, que hereda de la clase abstracta movible al estar definida por una posición y
- * ángulo, moverse siempre hacia adelante y tener unas restricciones de posición concretas.
+ * Esta clase define al objeto {@link Bala}, que hereda de la clase abstracta {@link Movible} al estar definida por una
+ * posicion y angulo, moverse siempre hacia adelante y tener unas restricciones de posicion concretas.
  */
 
 public class Bala extends Movible {
@@ -20,11 +22,11 @@ public class Bala extends Movible {
      */
     public static final int RADIO = 3;
     /**
-     * Diámetro de la bala
+     * Diametro de la bala
      */
     public static final int DIAMETRO = 2 * RADIO;
     /**
-     * La bala se autodestruirá después de este número de choques
+     * La bala se autodestruira despues de este numero de choques
      */
     public static final int MAX_CHOQUES = 10;
 
@@ -33,21 +35,37 @@ public class Bala extends Movible {
      */
     public static Color COLOR_BG = Color.DARK_GRAY;
     /**
-     * Color del borde de la bala. Es muy fino, por lo que en ocasiones puede ser difícil apreciarlo
+     * Color del borde de la bala. Es muy fino, por lo que en ocasiones puede ser dificil apreciarlo
      */
     public static Color COLOR_EDGE = Color.BLACK;
     private int choques = 0;
     private boolean active = true;
 
+    /**
+     * Crea una bala con una posicion, angulo y dibujo concretos.
+     *
+     * @param posicion {@link Movible#posicion}
+     * @param theta    {@link Movible#theta}
+     * @param dibujo   {@link Dibujo}
+     */
     public Bala(Point2D posicion, double theta, Dibujo dibujo) {
         super(posicion, theta, dibujo);
     }
 
+    /**
+     * Devuelve si la bala esta activada.
+     *
+     * @return si esta activada
+     */
     public boolean isActive() {
         return active;
     }
 
-
+    /**
+     * Pinta la {@link Bala} sobre el objeto {@link Graphics2D}.
+     *
+     * @param g Dónde se pintar la {@link Bala}
+     */
     @Override
     public void pintar(Graphics2D g) {
         if (illegalPosition()) {
@@ -62,22 +80,22 @@ public class Bala extends Movible {
     }
 
     /**
-     * Este método es invocado cuando la bala se choca contra un tanque
+     * Este metodo es invocado cuando la {@link Bala} se choca contra un {@link Tanque}.
      *
-     * @param t tanque con el que se choca
+     * @param t {@link Tanque} con el que se choca
      */
     private void choque(Tanque t) {
         active = false;
-        dibujo.getSonido().playSound(Sonido.GUNSHOOT);
-        dibujo.getBoard().hitPlayer(t);
+        dibujo.hitPlayer(t);
     }
 
 
     /**
-     * Permite el avanza de la bala. Debido a la alta velocidad y pequeño tamaño de la misma, este método avanzará la
-     * bala dando pequeños salto de Pared.GROSOR, con el objetivo de que esta no atraviese a otros objetos.
+     * Permite el avanza de la {@link Bala}. Debido a la alta velocidad y pequeño tamaño de la misma, este metodo
+     * avanzara la {@link Bala} dando pequeños saltos de {@link Pared#GROSOR}, con el objetivo de que esta no atraviese
+     * a otros objetos.
      *
-     * @param distancia distancia que avanzará la bala
+     * @param distancia distancia que avanzara la {@link Bala}
      */
     @Override
     public void avanza(int distancia) {
@@ -91,10 +109,10 @@ public class Bala extends Movible {
     }
 
     /**
-     * Esto método avanzará la bala una distancia concreta si el punto final cumple con las restricciones de posición.
-     * En caso contrario, no se produce movimiento. Sin embargo, este método no se preocupa porque todos los puntos
-     * entre el incial y el final cumplan las restricciones de posición. Por tanto, si se introduce un valor de distancia
-     * lo suficientemente grande, la bala podría llegar a atravesar objetos
+     * Esto metodo avanzara la {@link Bala} una distancia concreta si el punto final cumple con las restricciones de
+     * posicion. En caso contrario, no se produce movimiento. Sin embargo, este metodo no se preocupa porque todos los puntos
+     * entre el incial y el final cumplan las restricciones de posicion. Por tanto, si se introduce un valor de distancia
+     * lo suficientemente grande, la {@link Bala} podria llegar a atravesar objetos
      *
      * @param distancia distancia a avanzar
      */
@@ -109,11 +127,11 @@ public class Bala extends Movible {
                 return;
             }
             boolean rebote = false;
-            if (labUp() || labDown()) {
+            if (hasObstacleOver() || hasObstacleBelow()) {
                 reboteHorizontal();
                 rebote = true;
             }
-            if (labRight() || labLeft()) {
+            if (hasObstacleRight() || hasObstacleLeft()) {
                 reboteVertical();
                 rebote = true;
             }
@@ -129,22 +147,22 @@ public class Bala extends Movible {
     }
 
     /**
-     * Cambio de ángulo provocado por el choque contra una pared horizontal
+     * Cambio de angulo provocado por el choque contra una pared horizontal
      */
     private void reboteHorizontal() {
         setTheta(-theta);
     }
 
     /**
-     * Cambio de ángulo provocado por el choque contra un pared verical
+     * Cambio de angulo provocado por el choque contra un pared verical
      */
     private void reboteVertical() {
         setTheta(Math.PI - theta);
     }
 
     /**
-     * Cambio de ángulo con el objetivo de realizar un cambio de sentido pero no dirección. Este metodo es llamado cuando
-     * no se conoce el obstáculo que impide el movimiento de la bala.
+     * Cambio de angulo con el objetivo de realizar un cambio de sentido pero no direccion. Este metodo es llamado cuando
+     * no se conoce el obstaculo que impide el movimiento de la bala.
      */
     private void reboteOpuesto() {
         setTheta(Math.PI + theta);
@@ -162,11 +180,33 @@ public class Bala extends Movible {
     }
 
 
-    /*private boolean labDir(int offset) {
+    @Override
+    public boolean hasObstacleOver() {
         Lab lab = dibujo.getLab();
-        return lab.contains(new Point2D.Double(posicion.getX()+(RADIO+offset)*Math.cos(theta),
-                posicion.getY()+(RADIO+offset)*Math.sin(theta)));
-    }*/
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getCenterX(), bounds.getMinY() - OFFSET));
+    }
+
+    @Override
+    public boolean hasObstacleRight() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getMaxX() + OFFSET, bounds.getCenterY()));
+    }
+
+    @Override
+    public boolean hasObstacleLeft() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getMinX() - OFFSET, bounds.getCenterY()));
+    }
+
+    @Override
+    public boolean hasObstacleBelow() {
+        Lab lab = dibujo.getLab();
+        Rectangle2D bounds = getBounds();
+        return lab.contains(new Point2D.Double(bounds.getCenterX(), bounds.getMaxY() + OFFSET));
+    }
 
 
     @Override
@@ -178,11 +218,12 @@ public class Bala extends Movible {
     }
 
     /**
-     * Este método siempre devuelve verdadero, ya que una bala, al tener forma circular, no solapará a ningún objeto tras
-     * la rotación
+     * Este metodo siempre devuelve verdadero, ya que una bala, al tener forma circular, no solapara a ningun objeto tras
+     * la rotacion
+     * º
      *
-     * @param theta ángulo a rotar
-     * @return si se permite la rotación siguiendo las restricciones de posicón
+     * @param theta angulo a rotar
+     * @return si se permite la rotacion siguiendo las restricciones de posicon
      */
     @Override
     protected boolean validRotation(double theta) {
@@ -208,4 +249,13 @@ public class Bala extends Movible {
     private Ellipse2D getShape() {
         return new Ellipse2D.Double(posicion.getX(), posicion.getY(), DIAMETRO, DIAMETRO);
     }
+
+    @Override
+    public Rectangle2D getRepaintBounds() {
+        Rectangle2D bounds = getBounds2D();
+        final int offset = (int) (1.0 * BalasController.VELOCIDAD_BALA / Speeder.FRAMES_PER_SECOND + 1);
+        return new Rectangle2D.Double(bounds.getX() - offset, bounds.getY() - offset,
+                bounds.getWidth() + 2 * offset, bounds.getHeight() + 2 * offset);
+    }
+
 }

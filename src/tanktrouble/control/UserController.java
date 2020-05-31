@@ -5,28 +5,41 @@ import tanktrouble.reflection.Tanque;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * Representa a un {@link Controller controlador} de {@link Tanque} por teclado.
+ */
 public class UserController extends TanqueController implements KeyListener {
 
     /**
-     * La dirección del tanque se realizará con las teclas A, S, D y W del teclado.
-     * El disparo será con la tecla espacio.
+     * La direccion del {@link Tanque} se realizara con las teclas A, S, D y W del teclado.
+     * El disparo sera con la tecla espacio.
      * Este es el tipo de control por defecto.
      */
     public static final int KEYS_ASDW = 1;
 
     /**
-     * La direción del tanque se realizará con las felchas del teclado.
+     * La direcion del {@link Tanque} se realizara con las felchas del teclado.
      * El disparo se realiza con la tecla M.
      */
     public static final int KEYS_ARROWS = 2;
 
     private int keys;
 
+    /**
+     * Inicializa el {@link UserController}
+     *
+     * @param tanque {@link Tanque} a controlar
+     */
     public UserController(Tanque tanque) {
         super(tanque);
         keys = KEYS_ASDW;
     }
 
+    /**
+     * Teclas que se utilizaran. Puede ser {@link #KEYS_ASDW} o {@link #KEYS_ARROWS}.
+     *
+     * @param keys teclas utilizas
+     */
     public void setKeys(int keys) {
         this.keys = keys;
     }
@@ -48,7 +61,12 @@ public class UserController extends TanqueController implements KeyListener {
         setCode(e.getKeyCode(), false);
     }
 
-
+    /**
+     * Llamado cuando se presiona una tecla o suelta una tecla
+     *
+     * @param key   tecla
+     * @param state si ha sido presionado (true) o soltada (false)
+     */
     private void setCode(int key, boolean state) {
         if (key == getForwardKey())
             forward = state;
@@ -131,6 +149,5 @@ public class UserController extends TanqueController implements KeyListener {
         }
         throw new IllegalStateException("Illegal keys value: " + keys);
     }
-
 
 }
