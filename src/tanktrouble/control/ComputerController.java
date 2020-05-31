@@ -1,7 +1,7 @@
 package tanktrouble.control;
 
+import tanktrouble.reflection.Dibujo;
 import tanktrouble.reflection.Tanque;
-import tanktrouble.ui.Dibujo;
 
 import java.io.FileWriter;
 import java.io.IOException;

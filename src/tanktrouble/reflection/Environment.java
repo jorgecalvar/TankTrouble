@@ -3,7 +3,6 @@ package tanktrouble.reflection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import tanktrouble.misc.Util;
-import tanktrouble.ui.Dibujo;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;

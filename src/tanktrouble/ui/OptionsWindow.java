@@ -4,6 +4,7 @@ import tanktrouble.labcreator.LabManager;
 import tanktrouble.misc.Sonido;
 import tanktrouble.misc.Styler;
 import tanktrouble.misc.Util;
+import tanktrouble.reflection.Dibujo;
 
 import javax.swing.*;
 import java.awt.*;

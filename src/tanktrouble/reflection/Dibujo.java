@@ -1,11 +1,11 @@
-package tanktrouble.ui;
+package tanktrouble.reflection;
 
 import tanktrouble.control.*;
 import tanktrouble.labcreator.LabManager;
 import tanktrouble.misc.Sonido;
 import tanktrouble.misc.Styler;
 import tanktrouble.misc.Util;
-import tanktrouble.reflection.*;
+import tanktrouble.ui.GameWindow;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;

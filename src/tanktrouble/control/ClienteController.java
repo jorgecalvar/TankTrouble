@@ -2,8 +2,8 @@ package tanktrouble.control;
 
 import org.json.JSONObject;
 import tanktrouble.net.Cliente;
+import tanktrouble.reflection.Dibujo;
 import tanktrouble.reflection.Environment;
-import tanktrouble.ui.Dibujo;
 
 /**
  * Controla el {@link Dibujo} para el tipo de juego {@link tanktrouble.ui.GameWindow#PLAYER_VS_INTERNET_CLIENTE},

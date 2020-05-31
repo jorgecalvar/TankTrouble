@@ -1,10 +1,6 @@
 package tanktrouble.misc;
 
-import tanktrouble.reflection.Board;
-import tanktrouble.reflection.Lab;
-import tanktrouble.reflection.Pared;
-import tanktrouble.reflection.Tanque;
-import tanktrouble.ui.Dibujo;
+import tanktrouble.reflection.*;
 
 import java.awt.*;
 import java.util.HashMap;

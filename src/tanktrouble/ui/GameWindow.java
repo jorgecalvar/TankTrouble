@@ -1,5 +1,6 @@
 package tanktrouble.ui;
 
+import tanktrouble.reflection.Dibujo;
 import tanktrouble.reflection.Lab;
 
 import javax.swing.*;

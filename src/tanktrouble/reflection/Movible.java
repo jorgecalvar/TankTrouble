@@ -1,7 +1,6 @@
 package tanktrouble.reflection;
 
 import tanktrouble.misc.Util;
-import tanktrouble.ui.Dibujo;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;

@@ -2,7 +2,6 @@ package tanktrouble.reflection;
 
 import tanktrouble.control.BalasController;
 import tanktrouble.control.Speeder;
-import tanktrouble.ui.Dibujo;
 
 import java.awt.*;
 import java.awt.geom.Area;

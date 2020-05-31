@@ -1,6 +1,5 @@
 package tanktrouble.reflection;
 
-import tanktrouble.ui.Dibujo;
 import tanktrouble.ui.GameWindow;
 
 import java.awt.*;

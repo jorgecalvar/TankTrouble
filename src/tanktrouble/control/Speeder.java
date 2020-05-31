@@ -1,6 +1,6 @@
 package tanktrouble.control;
 
-import tanktrouble.ui.Dibujo;
+import tanktrouble.reflection.Dibujo;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;

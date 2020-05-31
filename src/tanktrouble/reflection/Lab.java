@@ -1,7 +1,6 @@
 package tanktrouble.reflection;
 
 import tanktrouble.labcreator.LabManager;
-import tanktrouble.ui.Dibujo;
 
 import java.awt.*;
 import java.awt.geom.Area;

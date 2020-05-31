@@ -2,9 +2,9 @@ package tanktrouble.control;
 
 import org.json.JSONObject;
 import tanktrouble.net.Servidor;
+import tanktrouble.reflection.Dibujo;
 import tanktrouble.reflection.Environment;
 import tanktrouble.reflection.Tanque;
-import tanktrouble.ui.Dibujo;
 
 /**
  * Clase que controla el tanque del oponente en caso de que el tipo de juego sea

@@ -1,12 +1,13 @@
 package tanktrouble.control;
 
 import tanktrouble.reflection.Bala;
+import tanktrouble.reflection.Dibujo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Se encarga de controlar las {@link Bala balas} representadas en el {@link tanktrouble.ui.Dibujo} y eliminarlas
+ * Se encarga de controlar las {@link Bala balas} representadas en el {@link Dibujo} y eliminarlas
  * cuando proceda.
  */
 public class BalasController implements Controller {
