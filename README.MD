@@ -30,7 +30,7 @@ en su pantalla.
 - El otro presionará **Unirme** e introducirá el código que le ha comunicado el otro usuario.
 
 
-*Nota: Este código es en realidad los dos últimos  dígitos de la dirección IP Wifi. (192.168.1.XX). En caso de no tener
+*Nota: Este código es en realidad los últimos  dígitos de la dirección IP Wifi. (192.168.1.XXX). En caso de no tener
 este formato también es posible introducir la dirección IP entera.*
 
 Para voler a la pantalla de Inicio presiona la tecla **Esc**.
@@ -49,7 +49,7 @@ Sin embargo, el usuario también puede crear sus propios laberintos, que deberá
 
 ![Ayuda Creador de Labs](screenshoots/AyudaCreadorLabs.png)
 
-1. El primer paso para crear un laberinto es seleccionar un **tamaño** de los permitidos.
+1. El primer paso para crear un laberinto es seleccionar un **tamaño** de los permitidos y presionar Aplicar.
 2. A continuación, podrá crear las paredes internas haciendo click en los botones de **Pintar** y **Borrar** del menú
 Pared. Para pintar una pared haz click en el primer punto (que deberá cambiar de color) y a continuación en el segundo.
 3. Después debe utilizar la opción de **Pintar tanque** para seleccionar la posición inicial de los tanques
