@@ -120,6 +120,7 @@ public class OptionsWindow extends JFrame {
 
         //setResizable(false);
         setLocationRelativeTo(null);
+        setIconImage(Util.getIcono());
         setVisible(true);
 
     }

@@ -63,6 +63,7 @@ public class InicioWindow extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
+        setIconImage(Util.getIcono());
         setVisible(true);
 
     }

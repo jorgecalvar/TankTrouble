@@ -193,4 +193,13 @@ public class Util {
         return "192.168.1." + simplifiedIP;
     }
 
+    /**
+     * Devuelve el icono de la aplicacion
+     *
+     * @return icono
+     */
+    public static Image getIcono() {
+        return new ImageIcon(Util.class.getClassLoader().getResource("icon/tanque3.png")).getImage();
+    }
+
 }

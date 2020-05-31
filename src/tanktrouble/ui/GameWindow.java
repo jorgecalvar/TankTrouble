@@ -1,5 +1,6 @@
 package tanktrouble.ui;
 
+import tanktrouble.misc.Util;
 import tanktrouble.reflection.Dibujo;
 import tanktrouble.reflection.Lab;
 
@@ -62,6 +63,7 @@ public class GameWindow extends JFrame {
 
         pack();
 
+        setIconImage(Util.getIcono());
         setVisible(true);
 
     }
